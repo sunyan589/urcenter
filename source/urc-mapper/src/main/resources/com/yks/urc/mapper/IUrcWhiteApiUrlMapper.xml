@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IUrcWhiteApiUrlMapper">
+
+    <select id="selectWhiteApi" resultType="java.lang.String">
+        SELECT white_api_url
+        FROM  urc_white_api_url
+    </select>
+    <select id="selectWhiteApiByWiteApi" parameterType="java.lang.String" resultType="java.lang.Integer">
+         SELECT COUNT(*)
+        FROM  urc_white_api_url
+        WHERE <if test="whiteApi!=null and whiteApi!=''">
+        white_api_url=#{whiteApi}
+    </if>
+    </select>
+    <insert id="insert" parameterType="com.yks.urc.entity.IUrcWhiteApiVO">
+        INSERT  INTO  urc_white_api_url
+        ( white_api_url,create_by,create_time,modified_time,modified_by)
+        VALUES (#{whiteApiUrl},#{createBy},#{createTime},#{modifiedTime},#{modifiedBy})
+    </insert>
+    <delete id="deleteApi" parameterType="java.lang.String">
+        DELETE FROM
+        urc_white_api_url
+        WHERE  white_api_url=#{whiteApi}
+    </delete>
+
+</mapper>

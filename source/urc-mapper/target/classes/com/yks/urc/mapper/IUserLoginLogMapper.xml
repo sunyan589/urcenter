@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IUserLoginLogMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.UserLoginLogDO">
+        <result  property="userName" jdbcType="VARCHAR" column="user_name"/>
+        <result  property="ip" jdbcType="VARCHAR" column="ip"/>
+        <result  property="ldapCost" jdbcType="TINYINT" column="ldap_cost"/>
+        <result  property="loginSuccess" jdbcType="TINYINT" column="is_login_success"/>
+        <result  property="remark" jdbcType="VARCHAR" column="remark"/>
+        <result  property="loginTime" jdbcType="VARCHAR" column="login_time"/>
+        <result  property="createTime" jdbcType="VARCHAR" column="create_time"/>
+        <result  property="modifiedTime" jdbcType="VARCHAR" column="modified_time"/>
+
+    </resultMap>
+    <insert id="insertUserLoginLog" parameterType="com.yks.urc.entity.UserLoginLogDO">
+        insert into user_login_log
+        (user_name,ip,ldap_cost,is_login_success,remark,login_time,create_time,modified_time)
+        values
+        (
+         #{userName},#{ip},#{ldapCost},#{loginSuccess},#{remark},#{loginTime},#{createTime},#{modifiedTime}
+        )
+    </insert>
+    <select id="selectUserLoginLog" resultMap="BaseResultMap">
+        select
+        user_name,ip,ldap_cost,is_login_success,remark,login_time,create_time,modified_time
+        from user_login_log
+        where id= '11135';
+    </select>
+
+
+
+</mapper>

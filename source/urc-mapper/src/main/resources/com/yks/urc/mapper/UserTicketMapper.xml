@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.UserTicketMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.UserTicketDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="ticket" jdbcType="VARCHAR" property="ticket"/>
+    <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp"/>
+    <result column="expired_time" jdbcType="TIMESTAMP" property="expiredTime"/>
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_name, ticket, expired_time, created_time, modified_time,login_time,device_name,login_ip
+  </sql>
+  <select id="selectUserTicketByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM urc_user_ticket
+    <where>
+      user_name = #{userName}
+    </where>
+    limit 1
+  </select>
+<insert id="insertUserTicket">
+  INSERT INTO urc_user_ticket (user_name,ticket,expired_time,created_time,modified_time,login_time,device_name,login_ip)
+          VALUES (#{userName},#{ticket},#{expiredTime},#{createdTime},#{modifiedTime},#{loginTime},#{deviceName},#{loginIp})
+</insert>
+  <update id="updateUserTicket">
+    UPDATE urc_user_ticket
+    <set>
+      <if test="createdTime != null">
+        created_time = #{createdTime},
+      </if>
+      <if test="loginTime != null">
+        login_time = #{loginTime},
+      </if>
+      ticket = #{ticket},expired_time = #{expiredTime},modified_time = #{modifiedTime},login_time = #{loginTime},device_name = #{deviceName},login_ip = #{loginIp}
+    </set>
+    where user_name = #{userName}
+  </update>
+    <update id="updateExpiredTime">
+      UPDATE urc_user_ticket set expired_time = #{expiredTime},modified_time = now(3)
+      where user_name = #{userName}
+    </update>
+  <delete id="deleteUserTicketByUserName" parameterType="java.lang.String">
+    DELETE FROM urc_user_ticket
+    <where>
+      user_name = #{userName}
+    </where>
+  </delete>
+
+</mapper>

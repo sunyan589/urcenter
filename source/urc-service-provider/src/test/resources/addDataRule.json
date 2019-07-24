@@ -1,0 +1,42 @@
+{
+  "data": {
+    "lstDataRule": [{
+      "userName": "test05",
+      "lstDataRuleSys": [{
+        "sysKey": "001",
+        "sysName": "订单",
+        "row": {
+          "isAnd": 1,
+          "subWhereClause": [{
+            "entityCode": "E_PlatformShopSite",
+            "entityName": "【平台】【账号】【站点】",
+            "expressionId": 1545202513267003000,
+            "fieldCode": "F_PlatformShopSite",
+            "operValuesArr": ["{\"platformId\":\"速卖通\",\"platformName\":\"SM\",\"lstShop\":[{\"shopId\":\"1\",\"shopName\":\"1\"}]}"],
+            "parentExpressionId": 1545202513267003000
+          }]
+        }
+      }, {
+        "sysKey": "008",
+        "sysName": "刊登",
+        "row": {
+          "isAnd": 1,
+          "subWhereClause": [{
+            "entityCode": "E_PlsShopAccount",
+            "entityName": "【销售账号】",
+            "expressionId": 1545202513269003000,
+            "fieldCode": "F_PlsShopAccount",
+            "operValuesArr": ["{\"platformId\":\"eBay\",\"platformName\":\"eBay\",\"lstShop\":[{\"shopId\":\"12deeping\",\"shopName\":\"12deeping\"}]}", "{\"platformId\":\"LAZADA\",\"platformName\":\"LAZADA\",\"lstShop\":[{\"shopId\":\"adhere\",\"shopName\":\"adhere\"}]}", "{\"platformId\":\"SHOPEE\",\"platformName\":\"SHOPEE\",\"lstShop\":[{\"shopId\":\"aashop.id\",\"shopName\":\"aashop.id\"}]}"],
+            "parentExpressionId": 1545202513268002800
+          }]
+        }
+      }]
+    }],
+    "lstUserName": ["test05"]
+  },
+  "ticket": "6aebd691ee0f011db4134803c708ec98",
+  "operator": "linwanxian",
+  "funcVersion": "5c15b18f2938aeb279892ab582f29d84",
+  "moduleUrl": "/user/usermanagementlist/datapauthorization/",
+  "personName": "蔺万先"
+}

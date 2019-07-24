@@ -1,0 +1,26 @@
+{
+  "data": {
+    "lstUserName": ["hpq01",
+      "hpq02"],
+    "lstDataRuleSys": [{
+      "sysKey": "011",
+      "sysName": "基础资料",
+      "row": {
+        "isAnd": 1,
+        "subWhereClause": [{
+          "entityCode": "E_StatisticsSystem",
+          "entityName": "[品类][中文名称][可用库存][成本价]",
+          "operValuesArr": ["{\"value\":\"firstCategory\",\"name\":\"品类\",\"data\":[{\"cateId\":\"11058\",\"cateNameCn\":\"包材\",\"children\":[{\"cateId\":\"11059\",\"cateNameCn\":\"仓库包材\",\"children\":[{\"cateId\":\"11060\",\"cateNameCn\":\"配送包材\"}]}]}],\"checkedKeys\":[\"11058\",\"11059\",\"11060\"]}",
+            "{\"value\":\"dataColumn\",\"name\":\"数据列\",\"data\":[{\"key\":\"chineseName\",\"name\":\"中文名称\",\"visiable\":\"不可见\"},{\"key\":\"costPrice\",\"name\":\"成本价\",\"visiable\":\"不可见\"},{\"key\":\"availableStock\",\"name\":\"可用库存\",\"visiable\":\"不可见\"}],\"checkedKeys\":[]}"],
+          "fieldCode": "F_StatisticsSystem"
+        }]
+      }
+    }]
+  },
+  "ticket": "e628a99348695a016acd494d43a9dba2",
+  "operator": "huangpeiqin",
+  "funcVersion": "b7403d197d3bfc11f0ee2b68af597ebd",
+  "moduleUrl": "/user/usermanagementlist/datapauthorization/",
+  "personName": "huangpeiqin",
+  "deviceName": "Chrome浏览器"
+}

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.PersonMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.Person">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="gender" jdbcType="TINYINT" property="gender" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="ding_user_id" jdbcType="VARCHAR" property="dingUserId" />
+    <result column="ding_id" jdbcType="VARCHAR" property="dingId" />
+    <result column="ding_unionid" jdbcType="VARCHAR" property="dingUnionid" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="join_date" jdbcType="DATE" property="joinDate" />
+    <result column="leave_date" jdbcType="DATE" property="leaveDate" />
+    <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  
+  
+    <resultMap id="BasePersonVOResultMap" type="com.yks.urc.vo.PersonVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="person_name" jdbcType="VARCHAR" property="personName" />
+    <result column="gender" jdbcType="TINYINT" property="gender" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="ding_user_id" jdbcType="VARCHAR" property="dingUserId" />
+    <result column="ding_id" jdbcType="VARCHAR" property="dingId" />
+    <result column="ding_unionid" jdbcType="VARCHAR" property="dingUnionid" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="birthday_str" jdbcType="VARCHAR" property="birthdayStr" />
+    <result column="join_date" jdbcType="DATE" property="joinDate" />
+    <result column="join_date_str" jdbcType="VARCHAR" property="joinDateStr" />
+    <result column="leave_date" jdbcType="DATE" property="leaveDate" />
+    <result column="job_number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    up.id, up.person_name,up.gender, up.phone_num, up.ding_user_id, up.ding_id, up.ding_unionid, up.birthday,
+    up.join_date,up.leave_date, up.job_number, up.email, up.position, up.create_time, up.create_by, up.modified_time, 
+    up.modified_by
+  </sql>
+  
+    <sql id="Base_User_Column_List">
+    up.person_name, up.phone_num,  date_format(up.birthday,'%Y-%m-%d') as birthday_str,
+    date_format(up.join_date,'%Y-%m-%d')  as join_date_str ,  up.job_number, up.email, up.position,uu.user_name
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from urc_person up
+    where up.id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  
+  
+    <select id="getUserByDingOrgId"   resultMap="BasePersonVOResultMap">
+	    select 
+	    <include refid="Base_User_Column_List" /> 
+	     from urc_person up left join  urc_person_org upo on upo.ding_user_id=up.ding_user_id 
+	     LEFT JOIN urc_user uu on up.ding_user_id=uu.ding_user_id 
+	     where upo.ding_org_id = #{dingOrgId,jdbcType=VARCHAR} 
+   	     limit #{offset},#{limit}
+  </select>
+  
+   <select id="getUserByDingOrgIdCount"  resultType="java.lang.Long">
+     SELECT count(*) 
+     from urc_person up left join  urc_person_org upo on upo.ding_user_id=up.ding_user_id 
+	  where upo.ding_org_id = #{dingOrgId,jdbcType=VARCHAR} 
+     
+  </select>
+  
+  
+  
+  
+  <select id="list"  resultMap="BasePersonVOResultMap">
+    select 
+     <include refid="Base_User_Column_List" /> 
+     from urc_person up LEFT JOIN urc_user uu on up.ding_user_id=uu.ding_user_id
+     <where>
+     		 <if test="jobNumber != null and jobNumber != '' ">
+     		 	up.job_number=#{jobNumber,jdbcType=VARCHAR}
+     		 </if>
+     		 
+     		 <if test="phoneNum != null and phoneNum != '' ">
+     		 	and up.phone_num=#{phoneNum,jdbcType=VARCHAR}
+     		 </if>
+     		<if test="personName != null and personName != '' ">
+     		   and up.person_name LIKE CONCAT(CONCAT('%',#{personName},'%')) OR up.person_name_collage  LIKE CONCAT(CONCAT('%',#{personName},'%'))
+     		 </if>
+     </where>
+    ORDER BY up.job_number desc
+   	 limit #{offset},#{limit}
+  </select>
+  
+  
+   <select id="count"  resultType="java.lang.Long">
+     SELECT count(up.id)
+     from urc_person up LEFT JOIN urc_user uu on up.ding_user_id=uu.ding_user_id
+     <where>
+     		 <if test="jobNumber != null and jobNumber != '' ">
+     		 	up.job_number=#{jobNumber,jdbcType=VARCHAR}
+     		 </if>
+     		 
+     		 <if test="phoneNum != null and phoneNum != '' ">
+     		 	and up.phone_num=#{phoneNum,jdbcType=VARCHAR}
+     		 </if>
+     		 
+     		<if test="personName != null and personName != '' ">
+              and up.person_name LIKE CONCAT(CONCAT('%',#{personName},'%'))  OR up.person_name_collage  LIKE CONCAT(CONCAT('%',#{personName},'%'))
+     		 </if>
+     </where>
+     ORDER BY up.job_number desc
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_person
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    
+    <delete id="deleteAllPerson">
+        TRUNCATE  TABLE  urc_person
+    </delete>
+  
+  <insert id="insert" parameterType="com.yks.urc.entity.Person">
+    insert into urc_person (id, person_name, gender, 
+      phone_num, ding_user_id, ding_id, 
+      ding_unionid, birthday, join_date, 
+      leave_date, job_number, email, 
+      position, create_time, create_by, 
+      modified_time, modified_by)
+    values (#{id,jdbcType=BIGINT}, #{personName,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, 
+      #{phoneNum,jdbcType=VARCHAR}, #{dingUserId,jdbcType=VARCHAR}, #{dingId,jdbcType=VARCHAR}, 
+      #{dingUnionid,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{joinDate,jdbcType=DATE}, 
+      #{leaveDate,jdbcType=DATE}, #{jobNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR})
+  </insert>
+  
+  
+      <insert id="insertBatchPerson" parameterType="com.yks.urc.entity.Person">
+        insert into urc_person 
+        (person_name,person_name_collage, gender,
+      phone_num, ding_user_id, ding_id, 
+      ding_unionid, birthday, join_date, 
+      leave_date, job_number, email, 
+      position, create_time, create_by, 
+      modified_time, modified_by)
+        values
+        <foreach collection="list" item="personList" separator=",">
+            (#{personList.personName},
+            #{personList.personNameCollage},
+            #{personList.gender},
+            #{personList.phoneNum},
+            #{personList.dingUserId},
+            #{personList.dingId},
+            #{personList.dingUnionid},
+            #{personList.birthday},
+            #{personList.joinDate},
+            #{personList.leaveDate},
+            #{personList.jobNumber},
+            #{personList.email},
+            #{personList.position},
+            #{personList.createTime},
+            #{personList.createBy},
+            #{personList.modifiedTime},
+            #{personList.modifiedBy})
+        </foreach>
+    </insert>
+  
+  
+  
+  <insert id="insertSelective" parameterType="com.yks.urc.entity.Person">
+    insert into urc_person
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="personName != null">
+        person_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="phoneNum != null">
+        phone_num,
+      </if>
+      <if test="dingUserId != null">
+        ding_user_id,
+      </if>
+      <if test="dingId != null">
+        ding_id,
+      </if>
+      <if test="dingUnionid != null">
+        ding_unionid,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="joinDate != null">
+        join_date,
+      </if>
+      <if test="leaveDate != null">
+        leave_date,
+      </if>
+      <if test="jobNumber != null">
+        job_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="position != null">
+        position,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="personName != null">
+        #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=TINYINT},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dingUserId != null">
+        #{dingUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dingId != null">
+        #{dingId,jdbcType=VARCHAR},
+      </if>
+      <if test="dingUnionid != null">
+        #{dingUnionid,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="joinDate != null">
+        #{joinDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null">
+        #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="jobNumber != null">
+        #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.Person">
+    update urc_person
+    <set>
+      <if test="personName != null">
+        person_name = #{personName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=TINYINT},
+      </if>
+      <if test="phoneNum != null">
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="dingUserId != null">
+        ding_user_id = #{dingUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="dingId != null">
+        ding_id = #{dingId,jdbcType=VARCHAR},
+      </if>
+      <if test="dingUnionid != null">
+        ding_unionid = #{dingUnionid,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="joinDate != null">
+        join_date = #{joinDate,jdbcType=DATE},
+      </if>
+      <if test="leaveDate != null">
+        leave_date = #{leaveDate,jdbcType=DATE},
+      </if>
+      <if test="jobNumber != null">
+        job_number = #{jobNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null">
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.Person">
+    update urc_person
+    set person_name = #{personName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=TINYINT},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      ding_user_id = #{dingUserId,jdbcType=VARCHAR},
+      ding_id = #{dingId,jdbcType=VARCHAR},
+      ding_unionid = #{dingUnionid,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      join_date = #{joinDate,jdbcType=DATE},
+      leave_date = #{leaveDate,jdbcType=DATE},
+      job_number = #{jobNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!--拿到用户的组织信息等-->
+  <select id="getPersonOrgById" resultType="com.yks.urc.vo.UserInfoVO">
+    select  uo.org_name AS orgName,uo.full_name_path AS parentOrgName
+      FROM urc_person p LEFT JOIN urc_person_org ug  ON  p.ding_user_id = ug.ding_user_id
+      LEFT JOIN urc_organization uo ON  ug.ding_org_id =uo.ding_org_id
+      WHERE  p.ding_user_id  =#{dingUserId} limit 1
+  </select>
+
+</mapper>

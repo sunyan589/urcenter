@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IDataRuleMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.DataRuleDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="data_rule_id" jdbcType="BIGINT" property="dataRuleId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, data_rule_id, user_name, create_time, create_by, modified_time, modified_by
+  </sql>
+    <!--批量添加用户数据权限关系-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into urc_data_rule
+        (data_rule_id, user_name, create_time, create_by)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.dataRuleId,jdbcType=TINYINT},#{item.userName,jdbcType=VARCHAR}
+            ,#{item.createTime,jdbcType=TIMESTAMP},#{item.createBy,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <!--根据userName获取dataRuleIds列表-->
+    <select id="getDataRuleIdsByUserName" resultType="java.lang.Long">
+       select data_rule_id from urc_data_rule
+        where user_name in
+        <foreach collection="userNames" item="userName" open="(" separator="," close=")">
+            #{userName}
+        </foreach>
+    </select>
+
+
+    <select id="getDataRule" parameterType="com.yks.urc.entity.DataRuleDO"   resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+         from urc_data_rule
+          <where>
+                <if test=" userName != null and userName != ''  ">
+                    user_name = #{userName}
+                </if>
+          </where>
+    </select>
+
+    <!--根据userName列表批量删除 -->
+    <delete id="delBatchByUserNames" parameterType="java.util.List">
+        delete from urc_data_rule
+        where user_name in
+        <foreach collection="list" item="userName" open="(" separator="," close=")">
+            #{userName}
+        </foreach>
+    </delete>
+  <!--  <delete id="delBatchByUserNames" parameterType="java.util.List">
+        delete ut,us,uc,ue
+        from
+        urc_data_rule ut
+        left join urc_data_rule_sys us on ut.data_rule_id = us.data_rule_id
+        left join urc_data_rule_col uc on us.data_rule_sys_id = uc.data_rule_sys_id
+        left join urc_expression ue on us.data_rule_sys_id = ue.data_rule_sys_id
+        where ut.user_name in
+        <foreach collection="list" item="userName" open="(" separator="," close=")">
+            #{userName}
+        </foreach>
+    </delete>-->
+
+
+</mapper>

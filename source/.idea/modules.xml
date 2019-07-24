@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/democlient/democlient.iml" filepath="$PROJECT_DIR$/democlient/democlient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-bp-api/urc-bp-api.iml" filepath="$PROJECT_DIR$/urc-bp-api/urc-bp-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-bp-common/urc-bp-common.iml" filepath="$PROJECT_DIR$/urc-bp-common/urc-bp-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-bp-impl/urc-bp-impl.iml" filepath="$PROJECT_DIR$/urc-bp-impl/urc-bp-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-bp-vo/urc-bp-vo.iml" filepath="$PROJECT_DIR$/urc-bp-vo/urc-bp-vo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-mapper/urc-mapper.iml" filepath="$PROJECT_DIR$/urc-mapper/urc-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-parent.iml" filepath="$PROJECT_DIR$/urc-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-service-api/urc-service-api.iml" filepath="$PROJECT_DIR$/urc-service-api/urc-service-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-service-provider/urc-service-provider.iml" filepath="$PROJECT_DIR$/urc-service-provider/urc-service-provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-service-vo/urc-service-vo.iml" filepath="$PROJECT_DIR$/urc-service-vo/urc-service-vo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/urc-taskScheduler/urc-taskScheduler.iml" filepath="$PROJECT_DIR$/urc-taskScheduler/urc-taskScheduler.iml" />
+    </modules>
+  </component>
+</project>

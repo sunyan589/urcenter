@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IRoleMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.RoleDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+        <result column="is_authorizable" jdbcType="TINYINT" property="isAuthorizable"/>
+        <result column="is_forever" jdbcType="TINYINT" property="isForever"/>
+        <result column="effective_time" jdbcType="TIMESTAMP" property="effectiveTime"/>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+    </resultMap>
+
+
+    <resultMap id="FullBaseResultMap" type="com.yks.urc.entity.RoleDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="role_id" jdbcType="BIGINT" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+        <result column="is_authorizable" jdbcType="TINYINT" property="isAuthorizable"/>
+        <result column="is_forever" jdbcType="TINYINT" property="isForever"/>
+        <result column="effective_time" jdbcType="TIMESTAMP" property="effectiveTime"/>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <collection property="permissionDOList" ofType="com.yks.urc.entity.RolePermissionDO">
+            <id column="pid" jdbcType="BIGINT" property="id"/>
+            <result column="prole_id" jdbcType="BIGINT" property="roleId"/>
+            <result column="sys_key" jdbcType="CHAR" property="sysKey"/>
+            <result column="sys_name" jdbcType="VARCHAR" property="sysName"/>
+            <result column="selected_context" jdbcType="LONGVARCHAR" property="selectedContext"/>
+        </collection>
+        <collection property="userRoleDOS" ofType="com.yks.urc.entity.UserRoleDO">
+            <id column="uid" jdbcType="BIGINT" property="id"/>
+            <result column="rrole_id" jdbcType="BIGINT" property="roleId"/>
+            <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        </collection>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+     id,role_id, role_name, is_active, is_authorizable, is_forever, effective_time, expire_time,
+     create_time, create_by, modified_time, modified_by,remark
+   </sql>
+
+    <insert id="insert" parameterType="com.yks.urc.entity.RoleDO">
+    insert into urc_role
+     (role_id,role_name, is_active,
+      is_authorizable, is_forever, effective_time,
+      expire_time, create_time, create_by,
+      modified_time, modified_by,remark)
+    values
+     (#{roleId,jdbcType=TINYINT}, #{roleName,jdbcType=VARCHAR}, #{isActive,jdbcType=TINYINT},
+      #{isAuthorizable,jdbcType=TINYINT}, #{isForever,jdbcType=TINYINT}, #{effectiveTime,jdbcType=TIMESTAMP},
+      #{expireTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+   <update id="updateByRoleId" parameterType="com.yks.urc.entity.RoleDO">
+      update urc_role
+      <set>
+          <if test="roleName != null and roleName != ''">
+              role_name = #{roleName,jdbcType=VARCHAR},
+          </if>
+          <if test="isActive != null">
+          is_active = #{isActive,jdbcType=TINYINT},
+          </if>
+          <if test="isAuthorizable != null">
+          is_authorizable = #{isAuthorizable,jdbcType=TINYINT},
+          </if>
+          <if test="isForever != null">
+          is_forever = #{isForever,jdbcType=TINYINT},
+          </if>
+          <if test="effectiveTime != null">
+          effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="expireTime != null">
+          expire_time = #{expireTime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="modifiedTime != null">
+          modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+          </if>
+          <if test="modifiedBy != null and modifiedBy != ''">
+          modified_by = #{modifiedBy,jdbcType=VARCHAR},
+          </if>
+          <if test="remark != null and remark != ''">
+              remark = #{remark,jdbcType=VARCHAR},
+          </if>
+      </set>
+      where role_id = #{roleId,jdbcType=TINYINT}
+   </update>
+
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from urc_role where id in
+        <foreach collection="list" item="roleId" open="(" separator="," close=")">
+            #{ roleId}
+        </foreach>
+    </delete>
+
+    <!--批量删除roleIds对应的角色、用户-角色关系、角色-权限关系数据-->
+    <delete id="deleteBatchRoleDatas" parameterType="java.util.HashMap">
+        delete ur,uur,urp
+        from
+        urc_role ur
+        left join urc_user_role uur on ur.role_id = uur.role_id
+        left join urc_role_permission urp on ur.role_id = urp.role_id
+        <where>
+            ur.role_id in
+            <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            <if test="createBy != null and createBy != ''">
+                and ur.create_by=#{createBy,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </delete>
+
+    <!--根据角色Id获取角色信息-->
+    <select id="getRoleByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_role
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+    <!--根据角色Id获取角色信息 包括功能权限、关联用户-->
+    <select id="getRoleDatasByRoleId" parameterType="java.lang.Long" resultMap="FullBaseResultMap">
+       select
+        ur.id,
+        ur.role_id,
+        ur.role_name,
+        ur.is_active,
+        ur.is_authorizable,
+        ur.is_forever,
+        ur.remark,
+        ur.effective_time,
+        ur.expire_time,
+        ur.create_time,
+        ur.create_by,
+        ur.modified_by,
+        ur.modified_time,
+        uur.id as uid,
+        uur.role_id as rrole_id,
+        uur.user_name,
+        urp.id as pid,
+        urp.role_id as prole_id,
+        urp.sys_key,
+        urp.selected_context
+      from
+	    urc_role ur
+        left join urc_user_role uur on ur.role_id = uur.role_id
+        left join urc_role_permission urp on ur.role_id = urp.role_id
+        where ur.role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+    <!--根据username/syskey获取角色功能权限-->
+    <select id="getFuncJsonByUserAndSysKey" resultType="java.lang.String">
+        select rp.selected_context
+        from urc_user_role ur
+        inner join urc_role r ON ur.role_id=r.role_id
+        inner join urc_role_permission rp ON rp.role_id=r.role_id
+        WHERE ur.user_name=#{userName} and rp.sys_key=#{sysKey}
+        AND r.is_active=1
+		AND (r.is_forever=1 or now() BETWEEN r.effective_time and r.expire_time)
+    </select>
+    
+     <!--根据username/syskey获取业务员角色功能权限, owner 所需的权限树-->
+    <select id="getBizAdminFuncJsonByUserAndSysKey" resultType="java.lang.String">
+        select rp.selected_context
+        from urc_user_role ur
+        inner join urc_role r ON ur.role_id=r.role_id
+        inner join urc_role_permission rp ON rp.role_id=r.role_id
+        WHERE ur.user_name=#{userName} and rp.sys_key=#{sysKey}
+        AND r.is_active=1 and r.is_authorizable=1 
+		AND (r.is_forever=1 or now() BETWEEN r.effective_time and r.expire_time)
+    </select>
+
+    <!--给定角色名的数据是否已存在-->
+    <select id="checkDuplicateRoleName" resultType="Boolean">
+        SELECT COUNT(id) > 0 FROM urc_role r
+        <where>
+            r.role_name = #{newRoleName}
+            <if test="roleId != null">
+                and r.role_id != #{roleId}
+            </if>
+        </where>
+    </select>
+
+    <!--判断给定的用户是否是超级管理员角色-->
+    <select id="isSuperAdminAccount" resultType="Boolean">
+        SELECT COUNT(r.role_id) > 0 FROM urc_user_role ur
+        LEFT JOIN urc_role r ON ur.role_id = r.role_id AND r.is_authorizable = 2 and r.is_active = 1
+        <where>
+            and (r.is_forever = 1 or (NOW() BETWEEN effective_time and expire_time))
+            and ur.user_name = #{userName}
+        </where>
+    </select>
+
+    <!--判断给定的用户是否是业务管理员角色-->
+    <select id="isAdminAccount" resultType="Boolean">
+        SELECT COUNT(r.role_id) > 0 FROM urc_user_role ur
+        LEFT JOIN urc_role r ON ur.role_id = r.role_id AND r.is_authorizable = 1 and r.is_active = 1
+        <where>
+            and (r.is_forever = 1 or (NOW() BETWEEN effective_time and expire_time))
+            and ur.user_name = #{userName}
+        </where>
+    </select>
+
+    <!--判断给定的用户是否是业务管理员角色-->
+    <select id="isSysAdminAccount" resultType="Boolean">
+        SELECT COUNT(r.role_id) > 0 FROM urc_user_role ur
+        LEFT JOIN urc_role r ON ur.role_id = r.role_id AND r.is_authorizable = 1 and r.is_active = 1
+        left join urc_role_permission urp on r.role_id=urp.role_id
+        <where>
+            and (r.is_forever = 1 or (NOW() BETWEEN effective_time and expire_time))
+            and ur.user_name = #{userName}
+            and urp.sys_key=#{sysKey}
+        </where>
+    </select>
+
+
+
+    <!--根据角色名获取角色信息-->
+    <select id="getByRoleName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_role
+        where role_name = #{roleName,jdbcType=VARCHAR}
+    </select>
+
+
+    <!--分页条件查询-->
+    <select id="listAllRoles" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_role
+
+    </select>
+
+
+    <!--分页条件查询 , 包含owner-->
+    <select id="listRolesByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select  u.role_id, u.role_name, u.is_active, u.is_authorizable, u.is_forever, u.effective_time, u.expire_time,
+        u.create_time, u.create_by, u.modified_time, u.modified_by,u.remark
+        from urc_role u
+        <where>
+            <!-- 是否启用-->
+            <if test ="isActive != null">
+                and  u.is_active =#{isActive}
+            </if>
+            <if test ="isAdmin != null">
+                and u.is_authorizable =#{isAdmin}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and   (
+                u.create_by=#{createBy,jdbcType=VARCHAR}
+                <if test="roleIds != null">
+                    or u.role_id IN
+                    <foreach collection="roleIds" index="index" item="roleId" open="(" separator="," close=")">
+                        #{roleId}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="roleNames != null and roleNames.size()>0">
+                and
+                <foreach item="item" index="index" collection="roleNames" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                        u.role_name  LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+            </if>
+            <if test="createBys != null and createBys.size() > 0">
+                and
+                <foreach item="item" index="index" collection="createBys" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                       u. create_by  LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+            </if>
+            <if test="owners != null and owners.size() >0">
+                and exists (
+                select o.role_id from urc_role_owner o
+               <where>
+                   <foreach item="item" index="index" collection="owners" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                        o.role_owner LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+                and o.role_id = u.role_id
+               </where>
+                )
+            </if>
+        </where>
+        order by create_time desc
+        limit #{currIndex},#{pageSize}
+    </select>
+
+    <!--获取总条目-->
+    <select id="getCounts" parameterType="java.util.HashMap" resultType="java.lang.Long">
+        select count(1) from urc_role u
+        <where>
+            <!-- 是否启用-->
+            <if test ="isActive != null">
+                and  u.is_active =#{isActive}
+            </if>
+            <if test ="isAdmin != null">
+                and u.is_authorizable =#{isAdmin}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and   (
+                u.create_by=#{createBy,jdbcType=VARCHAR}
+                <if test="roleIds != null">
+                    or u.role_id IN
+                    <foreach collection="roleIds" index="index" item="roleId" open="(" separator="," close=")">
+                        #{roleId}
+                    </foreach>
+                </if>
+                )
+            </if>
+            <if test="roleNames != null and roleNames.size()>0">
+                and
+                <foreach item="item" index="index" collection="roleNames" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                        u.role_name  LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+            </if>
+            <if test="createBys != null and createBys.size() > 0">
+                and
+                <foreach item="item" index="index" collection="createBys" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                        u. create_by  LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+            </if>
+            <if test="owners != null and owners.size() >0">
+                and exists (
+                select o.role_id from urc_role_owner o
+                <where>
+                  <foreach item="item" index="index" collection="owners" open="(" separator="or" close=")">
+                    <if test="item != null and item != ''">
+                        o.role_owner LIKE CONCAT(CONCAT('%',#{item},'%'))
+                    </if>
+                </foreach>
+                    and o.role_id = u.role_id
+                </where>
+                )
+            </if>
+        </where>
+    </select>
+
+    <!--根据用户名 获取角色名称-->
+    <select id="selectRoleNameByUserName" resultType="java.lang.String">
+        select  DISTINCT (r.role_name) as roleName
+        from urc_role r
+        INNER JOIN urc_user_role up on r.role_id = up.role_id
+        INNER JOIN urc_user u on up.user_name =u.user_name
+        WHERE u.user_name =#{userName}
+    </select>
+    <!-- 获取所有过期的角色关联的用户 -->
+    <select id="getUsersOfAllExpiredRole" resultType="java.lang.String">
+    	select distinct ur.user_name
+		FROM urc_user_role ur inner join urc_role r ON ur.role_id=r.role_id
+		where 1=1
+		AND r.is_active=1
+		AND r.is_forever=0 and (now() BETWEEN r.effective_time and r.expire_time)=0
+    </select>
+
+    <!-- 将所有过期的角色 is_active 设置为0 -->
+    <select id="updateAllExpiredRole" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_role r
+        where r.is_active=1
+        AND r.is_forever=0 and (now() BETWEEN r.effective_time and r.expire_time)=0;
+
+        UPDATE urc_role
+        SET is_active=0
+        where is_active=1
+        AND is_forever=0 and (now() BETWEEN effective_time and expire_time)=0
+    </select>
+    <!--判断用户是否是管理员或超级管理员-->
+    <select id="isAdminOrSuperAdmin" resultType="java.lang.Boolean">
+       SELECT COUNT(r.role_id) > 0 FROM urc_user_role ur
+        LEFT JOIN urc_role r ON ur.role_id = r.role_id AND r.is_authorizable !=0 and r.is_active = 1
+        AND (r.is_forever=1 or now() BETWEEN r.effective_time and r.expire_time)
+        WHERE ur.user_name = #{userName}
+    </select>
+
+
+</mapper>

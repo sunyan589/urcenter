@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- 此文件是一个校验demo配置文件,配置完成后，需提交到validator-config.xml配置文件制定的zookeeper路径下 -->
+<validator-config>
+    <!-- 校验规则的key -->
+    <method id="addUser">
+        <!-- 对应需要校验的字段规则，相关的属性值可选范围参考 com.yks.common.validator.core.Param 类属性 -->
+        <param name="name" notBlank="true" />
+        <param name="jobNumber" notNull="true" isNumber="true" />
+        <param name="sex" notBlank="true" enumeration="male,female" />
+    </method>
+    <method id="addUsers">
+        <param name="name" notBlank="true" />
+        <param name="jobNumber" notNull="true" isNumber="true" />
+        <!--<param name="sex" notBlank="true" enumeration="male,female" />-->
+    </method>
+</validator-config>

@@ -1,0 +1,31 @@
+{
+    "operator":"panyun",
+    "pwd":"com.yks.urc.123456",
+    "ticket":"f96d0e4d01701baf0a1773c0095314de",
+    "data":[
+        {
+            "system": {
+                "key": "000",
+                "name": "首页",
+                "url": "/"
+            },
+            "menu": [
+                {
+                    "key": "000-000001",
+                    "name": "首页",
+                    "url": "/",
+                    "module": [
+                        {
+                            "key": "000-000001-000001",
+                            "name": "数据走势",
+                            "url": "/",
+                            "show": 1,
+                            "function": [],
+                            "module": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

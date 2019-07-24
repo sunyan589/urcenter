@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.EntityMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.Entity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="entity_code" jdbcType="VARCHAR" property="entityCode" />
+    <result column="entity_name" jdbcType="VARCHAR" property="entityName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, entity_code, entity_name, remark, create_time, create_by, modified_time, modified_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from urc_entity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <insert id="insert" parameterType="com.yks.urc.entity.Entity">
+    insert into urc_entity (id, entity_code, entity_name, 
+      remark, create_time, create_by, 
+      modified_time, modified_by)
+    values (#{id,jdbcType=BIGINT}, #{entityCode,jdbcType=VARCHAR}, #{entityName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR})
+  </insert>
+  <!--通过entity_code  查询entity-->
+    <select id="selectEntityByCode" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List"/> FROM  urc_entity WHERE  entity_code =#{entityCode}
+    </select>
+
+  <select id="getEntityMap" resultType="com.yks.urc.entity.Entity" >
+    select entity_code ,entity_name from urc_entity
+  </select>
+</mapper>

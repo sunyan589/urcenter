@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.AuthWayMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.AuthWay">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="sys_key" jdbcType="CHAR" property="sysKey" />
+    <result column="sort_idx" jdbcType="TINYINT" property="sortIdx"/>
+    <result column="entity_code" jdbcType="VARCHAR" property="entityCode"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, sys_key, create_time, create_by, modified_time, modified_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from urc_auth_way
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_auth_way
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yks.urc.entity.AuthWay">
+    insert into urc_auth_way (id, sys_key, create_time, 
+      create_by, modified_time, modified_by
+      )
+    values (#{id,jdbcType=BIGINT}, #{sysKey,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yks.urc.entity.AuthWay">
+    insert into urc_auth_way
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="sysKey != null">
+        sys_key,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sysKey != null">
+        #{sysKey,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.AuthWay">
+    update urc_auth_way
+    <set>
+      <if test="sysKey != null">
+        sys_key = #{sysKey,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.AuthWay">
+    update urc_auth_way
+    set sys_key = #{sysKey,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <!--通过#sys_key 拿到对应的业务VO-->
+  <select id="getAuthWayVoBySysKey"  resultType="com.yks.urc.vo.AuthWayVO">
+    select up.sys_key as sysKey,up.sys_name as sysName, uw.sort_idx as sortIdx,ue.entity_code as entityCode,ue.entity_name as entityName
+          FROM urc_auth_way uw
+          INNER JOIN urc_permission up ON uw.sys_key =up.sys_key
+          INNER JOIN urc_entity ue on uw.entity_code =ue.entity_code
+          WHERE uw.sys_key =#{sysKey}
+          ORDER  BY  up.sys_key,uw.sort_idx
+  </select>
+  <!--通过sysKey 获取entitycode-->
+  <select id="getEntityBySyskey" resultMap="BaseResultMap">
+      SELECT  entity_code FROM  urc_auth_way WHERE  sys_key =#{sysKey}
+  </select>
+
+</mapper>

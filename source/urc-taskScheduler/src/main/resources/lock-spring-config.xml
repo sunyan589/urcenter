@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory"
+		factory-method="newClient" init-method="start">
+		<constructor-arg index="0" value="192.168.201.211:2181,192.168.201.212:2181,192.168.201.213:2181" />
+		<!-- sessionTimeoutMs会话超时时间，单位为毫秒。默认是60000ms -->
+		<constructor-arg index="1" value="5000" />
+		<!-- connectionTimeoutMs连接创建超时时间，单位毫秒，默认15000ms -->
+		<constructor-arg index="2" value="3000" />
+		<constructor-arg index="3" ref="retryPolicy" />
+	</bean>
+		
+	<!-- 重连策略 -->
+	<bean id="retryPolicy" class="org.apache.curator.retry.ExponentialBackoffRetry">
+		<!-- 间隔时间基数 -->
+		<constructor-arg index="0" value="1000" />
+		<!-- 重连策略 -->
+		<constructor-arg index="1" value="3" />
+	</bean>
+
+</beans>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="democlient" />
+        <module name="urc-bp-api" />
+        <module name="urc-bp-common" />
+        <module name="urc-bp-impl" />
+        <module name="urc-bp-vo" />
+        <module name="urc-mapper" />
+        <module name="urc-service-api" />
+        <module name="urc-service-provider" />
+        <module name="urc-service-vo" />
+        <module name="urc-taskScheduler" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="democlient" target="1.8" />
+      <module name="urc-bp-api" target="1.8" />
+      <module name="urc-bp-common" target="1.8" />
+      <module name="urc-bp-impl" target="1.8" />
+      <module name="urc-bp-vo" target="1.8" />
+      <module name="urc-mapper" target="1.8" />
+      <module name="urc-parent" target="1.8" />
+      <module name="urc-service-api" target="1.8" />
+      <module name="urc-service-provider" target="1.8" />
+      <module name="urc-service-vo" target="1.8" />
+      <module name="urc-taskScheduler" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

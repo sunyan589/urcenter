@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.PlatformMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.PlatformDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="platform_id" jdbcType="VARCHAR" property="platformId" />
+    <result column="platform_name" jdbcType="TINYINT" property="platformName"/>
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, platform_id, platform_name, create_time,create_by, modified_time, modified_by
+  </sql>
+ <!--清除表-->
+  <delete id="deletePlatform">
+    DELETE from urc_platform
+  </delete>
+  <!--插入-->
+  <insert id="insertPlatform" parameterType="com.yks.urc.entity.PlatformDO">
+    insert into urc_platform
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="platformId != null">
+        platform_id,
+      </if>
+      <if test="platformName != null">
+        platform_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="platformId != null">
+        #{platformId,jdbcType=VARCHAR},
+      </if>
+      <if test="platformName != null">
+        #{platformName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!--查找所有的平台-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/> from urc_platform
+  </select>
+<!--查找所有的平台账号站点当账号id不为空的数据-->
+  <select id="getAllPlatformShopSite" resultType="com.yks.urc.vo.OmsPlatShopSiteVO">
+    SELECT
+	p.platform_id AS platformId, p.platform_name AS platformName ,s.shop_id AS shopId , s.shop_name AS shopName,s.site_id AS siteId,s.site_name AS siteName
+    FROM
+	urc_platform p,urc_shop_site s
+    WHERE
+    p.platform_id = s.platform_id AND s.shop_id != ''
+  </select>
+
+</mapper>

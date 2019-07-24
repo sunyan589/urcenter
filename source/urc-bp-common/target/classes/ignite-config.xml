@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<bean id="igniteConfiguration" class="org.apache.ignite.configuration.IgniteConfiguration">
+		<property name="peerClassLoadingEnabled" value="true" />
+
+<!--  -->		<property name="clientMode" value="true" />
+
+		<property name="igniteInstanceName" value="urc" />
+		
+		<property name="persistentStoreConfiguration" ref="persistentStoreConfiguration" />
+
+		<property name="discoverySpi" ref="tcpDiscoverySpi" />
+	</bean>
+	
+	<bean id="persistentStoreConfiguration" class="org.apache.ignite.configuration.PersistentStoreConfiguration">
+		<property name="persistentStorePath" value="D:\data\ignite\persistence"/>
+        <property name="walStorePath" value="D:\data\ignite\wal"/>
+        <property name="walArchivePath" value="D:\data\ignite\wal\archive"/>
+	</bean>
+
+	<bean id="tcpDiscoverySpi" class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+		<property name="ipFinder" ref="tcpDiscoveryZookeeperIpFinder"></property>
+	</bean>
+
+	<bean id="tcpDiscoveryZookeeperIpFinder"
+		class="org.apache.ignite.spi.discovery.tcp.ipfinder.zk.TcpDiscoveryZookeeperIpFinder">
+		<property name="zkConnectionString"
+			value="192.168.201.211:2181,192.168.201.212:2181,192.168.201.213:2181" />
+		
+		<property name="basePath" value="/ignite-cluster/urc" />
+	</bean>
+
+	<bean id="cacheConfiguration" class="org.apache.ignite.configuration.CacheConfiguration">
+		<property name="cacheMode" value="PARTITIONED" />
+		<property name="backups" value="2" />
+	</bean>
+
+	<bean id="collectionConfiguration" class="org.apache.ignite.configuration.CollectionConfiguration">
+	</bean>
+
+</beans>

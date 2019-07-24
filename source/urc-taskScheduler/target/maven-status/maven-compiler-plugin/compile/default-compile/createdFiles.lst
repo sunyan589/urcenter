@@ -1,0 +1,6 @@
+com\yks\urc\task\RoleExpiredTask.class
+com\yks\urc\task\PlatformShopSiteTask.class
+com\yks\urc\task\UserInfoTask.class
+com\yks\urc\task\DingDingTask.class
+com\yks\urc\TaskSchedulerStarter.class
+com\yks\urc\constant\Constant.class

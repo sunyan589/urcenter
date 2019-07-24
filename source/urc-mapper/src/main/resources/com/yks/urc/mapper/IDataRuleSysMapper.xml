@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IDataRuleSysMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.DataRuleSysDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="data_rule_sys_id" jdbcType="BIGINT" property="dataRuleSysId"/>
+        <result column="data_rule_id" jdbcType="BIGINT" property="dataRuleId"/>
+        <result column="sys_key" jdbcType="CHAR" property="sysKey"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+
+    <resultMap id="DataRuleSyAndOperMap" type="com.yks.urc.entity.DataRuleSysDO">
+        <id column="sid" jdbcType="BIGINT" property="id"/>
+        <result column="data_rule_sys_id" jdbcType="BIGINT" property="dataRuleSysId"/>
+        <result column="sys_key" jdbcType="CHAR" property="sysKey"/>
+        <result column="sys_name" jdbcType="VARCHAR" property="sysName"/>
+        <result column="data_rule_id" jdbcType="BIGINT" property="dataRuleId"/>
+        <collection property="dataRuleColDOS" ofType="com.yks.urc.entity.DataRuleColDO">
+            <id column="did" jdbcType="BIGINT" property="id"/>
+            <result column="data_rule_sys_id" jdbcType="BIGINT" property="dataRuleSysId"/>
+            <result column="col_json" jdbcType="LONGVARCHAR" property="colJson"/>
+            <result column="dentity_code" jdbcType="VARCHAR" property="entityCode"/>
+        </collection>
+        <collection property="expressionDOS" ofType="com.yks.urc.entity.ExpressionDO">
+            <id column="eid" jdbcType="BIGINT" property="id"/>
+            <result column="expression_id" jdbcType="BIGINT" property="expressionId"/>
+            <result column="data_rule_sys_id" jdbcType="BIGINT" property="dataRuleSysId"/>
+            <result column="is_and" jdbcType="TINYINT" property="isAnd"/>
+            <result column="field_code" jdbcType="VARCHAR" property="fieldCode"/>
+            <result column="eentity_code" jdbcType="VARCHAR" property="entityCode"/>
+            <result column="oper" jdbcType="VARCHAR" property="oper"/>
+            <result column="parent_expression_id" jdbcType="BIGINT" property="parentExpressionId"/>
+            <result column="oper_values" jdbcType="LONGVARCHAR" property="operValues"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, data_rule_sys_id, data_rule_id, sys_key, create_time, create_by, modified_time, modified_by
+   </sql>
+    <!--新增-->
+    <insert id="insert" parameterType="com.yks.urc.entity.DataRuleSysDO">
+        insert into urc_data_rule_sys ( data_rule_id, sys_key,
+        create_time, create_by, modified_time, modified_by)
+        values ( #{dataRuleId,jdbcType=BIGINT}, #{sysKey,jdbcType=CHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP},#{modifiedBy,jdbcType=VARCHAR})
+    </insert>
+
+    <!--批量新增-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into urc_data_rule_sys ( data_rule_sys_id,data_rule_id, sys_key,create_time, create_by, modified_time,
+        modified_by)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            ( #{item.dataRuleSysId,jdbcType=BIGINT},#{item.dataRuleId,jdbcType=BIGINT}, #{item.sysKey,jdbcType=CHAR},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR},
+            #{item.modifiedTime,jdbcType=TIMESTAMP},#{item.modifiedBy,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <!--根据dataRuleId 获取数据权限Sys 包含行权限、列权限 -->
+    <select id="getDataRuleSyAndOpersById" parameterType="java.lang.Long" resultMap="DataRuleSyAndOperMap">
+        select
+        us.id as sid,
+        us.sys_key,
+        ud.id as did,
+        ud.data_rule_sys_id,
+        ud.col_json,
+        ud.entity_code AS dentity_code,
+        ue.id as eid,
+        ue.expression_id,
+        ue.data_rule_sys_id,
+        ue.is_and,
+        ue.field_code,
+        ue.entity_code AS eentity_code,
+        ue.oper,
+        ue.parent_expression_id,
+        ue.oper_values
+        from urc_data_rule_sys us
+        left join urc_data_rule_col ud on us.data_rule_sys_id = ud.data_rule_sys_id
+        left join urc_expression ue on us.data_rule_sys_id = ue.data_rule_sys_id
+        where us.data_rule_id = #{dataRuleId,jdbcType=BIGINT}
+    </select>
+
+
+
+    <!--根据用户名得到sys_id-->
+    <select id="getDataRuleSysByUserName" parameterType="com.yks.urc.entity.UserDO" resultMap="BaseResultMap">
+        select
+        udrs.data_rule_sys_id,
+        udrs.data_rule_id,
+        udrs.sys_key,
+        up.sys_name
+        from
+        urc_data_rule_sys udrs
+        LEFT JOIN urc_data_rule udr ON udrs.data_rule_id = udr.data_rule_id
+        LEFT JOIN urc_permission up ON udrs.sys_key=up.sys_key
+        <where>
+            <if test=" userDO.userName !=null and userDO.userName != '' ">
+                udr.user_name = #{userDO.userName} 
+            </if>
+            <if test=" list != null and list.size >0  ">
+         		AND   udrs.sys_key  IN
+	            <foreach collection="list" index="index" item="sysKey" open="(" separator="," close=")">
+	                      #{sysKey} 
+	             </foreach>
+       		 </if>
+        </where>
+    </select>
+
+
+
+    <select id="getDataRuleSysGtDt"   resultMap="BaseResultMap">
+            SELECT
+                udrs.data_rule_id,
+                udrs.data_rule_sys_id,
+                udrs.create_time,
+                udrs.sys_key,
+                udr.user_name
+             from urc_data_rule_sys udrs
+             LEFT JOIN urc_data_rule udr  ON udrs.data_rule_id = udr.data_rule_id
+            <where>
+                <if test="sysKey !=null and sysKey != '' ">
+                    udrs.sys_key = #{sysKey}
+                </if>
+                <if test=" createTime != null  ">
+                    <![CDATA[  and udrs.create_time >= #{createTime}   ]]>
+                </if>
+                AND  udr.user_name is not null
+            </where>
+        ORDER BY udrs.create_time asc
+        LIMIT #{pageSize}
+    </select>
+
+
+    <select id="getDataRuleSysEqDt"   resultMap="BaseResultMap">
+        SELECT
+        udrs.data_rule_id,
+        udrs.data_rule_sys_id,
+        udrs.create_time,
+        udrs.sys_key,
+        udr.user_name
+        from urc_data_rule_sys udrs
+        LEFT JOIN urc_data_rule udr  ON udrs.data_rule_id = udr.data_rule_id
+        <where>
+            <if test="sysKey !=null and sysKey != '' ">
+                udrs.sys_key = #{sysKey}
+            </if>
+            <if test=" createTime != null  ">
+                <![CDATA[  and udrs.create_time = #{createTime}   ]]>
+            </if>
+            AND  udr.user_name is not null
+        </where>
+        ORDER BY udrs.create_time asc
+    </select>
+
+
+    <!--根据dataRuleID删除 权限数据Sys、行权限、列权限-->
+    <delete id="deldataRuleSysDatasById" parameterType="java.lang.Long">
+        delete  us,uc,ue
+        from
+        urc_data_rule_sys us
+        left join urc_data_rule_col uc on us.data_rule_sys_id = uc.data_rule_sys_id
+        left join urc_expression ue on us.data_rule_sys_id = ue.data_rule_sys_id
+        where  us.data_rule_id = #{dataRuleId,jdbcType=BIGINT}
+    </delete>
+
+    <!--根据dataRuleID列表删除 权限数据Sys、行权限、列权限-->
+    <delete id="delRuleSysDatasByIdsAndCreatBy">
+        delete us,uc,ue
+        from
+        urc_data_rule_sys us
+        left join urc_data_rule_col uc on us.data_rule_sys_id = uc.data_rule_sys_id
+        left join urc_expression ue on us.data_rule_sys_id = ue.data_rule_sys_id
+        where us.data_rule_id in
+        <foreach collection="dataRuleIds" item="dataRuleId" open="(" separator="," close=")">
+            #{dataRuleId}
+        </foreach>
+        <if test="createBy != null and createBy!=''">
+            and us.create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+    </delete>
+
+
+    <!--根据dataRuleID以及sysKeys列表删除 权限数据Sys、行权限、列权限-->
+    <delete id="delRuleSysDatasByIdsAndSyskey">
+        delete us,uc,ue
+        from
+        urc_data_rule_sys us
+        left join urc_data_rule_col uc on us.data_rule_sys_id = uc.data_rule_sys_id
+        left join urc_expression ue on us.data_rule_sys_id = ue.data_rule_sys_id
+        <where>
+          <if test=" dataRuleId != null ">
+              us.data_rule_id = #{dataRuleId}
+          </if>
+          <if test=" sysKeys != null and sysKeys.size()>0 ">
+              and us.sys_key in
+              <foreach collection="sysKeys" item="sysKey" open="(" separator="," close=")">
+                  #{sysKey}
+              </foreach>
+          </if>
+        </where>
+    </delete>
+
+    <select id="getTemplOwnSysByDataRuleId" resultType="java.lang.String">
+        select sys_key from urc_data_rule_sys where data_rule_id=  #{dataRuleId,jdbcType=BIGINT}
+    </select>
+
+    <select id="getUserOwnSysByUserName" resultType="java.lang.String">
+        select sys_key from urc_data_rule ud left join urc_data_rule_sys us
+         on ud.data_rule_id = us.data_rule_id
+         where ud.user_name= #{userName,jdbcType=VARCHAR}
+    </select>
+</mapper>

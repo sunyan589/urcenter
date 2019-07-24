@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IUserRoleMapper">
+    <resultMap id="BaseResultMap2" type="com.yks.urc.entity.UserRoleDO">
+        <id column="id" jdbcType="TINYINT" property="id"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+
+
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.UserRoleDO">
+        <id column="id" jdbcType="TINYINT" property="id"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <!--用户角色关系表 与角色表一对多-->
+        <collection property="roleDOS" ofType="com.yks.urc.entity.RoleDO">
+            <id column="id" jdbcType="TINYINT" property="id"/>
+            <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+            <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+            <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+            <result column="is_authorizable" jdbcType="TINYINT" property="isAuthorizable"/>
+            <result column="is_forever" jdbcType="TINYINT" property="isForever"/>
+            <result column="effective_time" jdbcType="TIMESTAMP" property="effectiveTime"/>
+            <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+            <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+            <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+            <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+            <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, role_id, user_name, create_by, create_time, modified_by, modified_time
+  </sql>
+    <!--批量删除-->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from urc_user_role where role_id in
+        <foreach collection="list" item="roleId" open="(" separator="," close=")">
+            #{ roleId}
+        </foreach>
+    </delete>
+    <!--根据roleId删除-->
+    <delete id="deleteByRoleId" parameterType="java.lang.Long">
+      delete from urc_user_role where role_id = #{roleId,jdbcType=TINYINT}
+    </delete>
+
+
+    <delete id="deleteUserRole" parameterType="com.yks.urc.entity.UserRoleDO">
+        delete from urc_user_role
+        <where>
+            <if test="roleId != null ">
+                role_id =#{roleId}
+            </if>
+        </where>
+
+    </delete>
+
+
+    <delete id="deleteUserRoleInUserName" parameterType="com.yks.urc.entity.UserRoleDO">
+        delete from urc_user_role
+        <where>
+            <if test="userRole.roleId != null ">
+                role_id =#{userRole.roleId}
+            </if>
+            <if test=" userNameList !=null and userNameList.size >0 ">
+                AND   user_name  IN
+                <foreach collection="userNameList" index="index" item="userName" open="(" separator="," close=")">
+                    #{userName}
+                </foreach>
+            </if>
+
+
+        </where>
+
+    </delete>
+
+
+
+    <!--根据userName删除-->
+    <delete id="deleteByUserName" parameterType="java.lang.String">
+      delete from urc_user_role where user_name = #{userName,jdbcType=VARCHAR}
+    </delete>
+
+    <!--批量新增-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into urc_user_role
+        (role_id,user_name,create_time,create_by,modified_time,modified_by)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.roleId,jdbcType=TINYINT},#{item.userName,jdbcType=VARCHAR}
+            ,#{item.createTime,jdbcType=TIMESTAMP},#{item.createBy,jdbcType=VARCHAR}
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP},#{item.modifiedBy,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="com.yks.urc.entity.UserRoleDO">
+    insert into urc_user_role (id, role_id, user_name, 
+      create_by, create_time, modified_by, 
+      modified_time)
+    values (#{id,jdbcType=TINYINT}, #{roleId,jdbcType=TINYINT}, #{userName,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.yks.urc.entity.UserRoleDO">
+        insert into urc_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="modifiedTime != null">
+                modified_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=TINYINT},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=TINYINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.UserRoleDO">
+        update urc_user_role
+        <set>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=TINYINT},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=TINYINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.UserRoleDO">
+    update urc_user_role
+    set role_id = #{roleId,jdbcType=TINYINT
+    },
+      user_name = #{userName,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+    <select id="getSysKeyByUser" resultType="java.lang.String">
+        select distinct p.sys_key
+        from urc_user_role u
+        INNER JOIN urc_role r on u.role_id =r.role_id
+        INNER JOIN urc_role_permission p on r.role_id=p.role_id
+        where u.user_name =#{userName}
+        AND r.is_active=1
+		AND (r.is_forever=1 or now() BETWEEN r.effective_time and r.expire_time)
+		AND p.sys_key is not null
+		order by p.sys_key
+    </select>
+
+    <select id="getUserNameByRoleId" resultType="java.lang.String" parameterType="com.yks.urc.entity.UserRoleDO">
+        SELECT user_name from urc_user_role
+        <where>
+                role_id=#{roleId}
+            <if test="createBy != null and createBy != '' ">
+                and create_by=#{createBy}
+            </if>
+        </where>
+    </select>
+    <!--根据roleId列表和创建人查找用户-角色对应的用户名-->
+    <select id="listUserNamesByRoleIds" resultType="java.lang.String" parameterType="java.util.HashMap">
+        select  u.user_name from urc_user_role u INNER  JOIN  urc_role_owner r on u.role_id = r.role_id
+        <where>
+           u.role_id in
+            <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            <if test="owner != null and owner != '' ">
+                and  r.role_owner=#{owner}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getNameVOByRoleId" resultType="com.yks.urc.vo.NameVO" parameterType="com.yks.urc.entity.UserRoleDO">
+        SELECT uu.user_name as userName,up.person_name as personName
+        FROM
+         urc_user uu
+        LEFT JOIN urc_user_role uur  ON uur.user_name = uu.user_name
+        LEFT JOIN urc_person up ON uu.ding_user_id = up.ding_user_id
+        <where>
+            uur.role_id=#{roleId}
+            <if test="createBy != null and createBy != '' ">
+                and uur.create_by=#{createBy}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getUserOwnSysByUserName" resultType="java.lang.String">
+        select sys_key from urc_user_role uur
+        left join urc_role ur on uur.role_id=ur.role_id
+        left join urc_role_permission urp on uur.role_id = urp.role_id
+        where uur.user_name= #{userName,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

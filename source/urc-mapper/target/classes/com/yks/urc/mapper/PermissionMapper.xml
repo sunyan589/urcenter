@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.PermissionMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.PermissionDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="sys_name" jdbcType="CHAR" property="sysName"/>
+        <result column="sys_key" jdbcType="CHAR" property="sysKey"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yks.urc.entity.PermissionDO">
+        <result column="sys_context" jdbcType="LONGVARCHAR" property="sysContext"/>
+        <result column="api_url_prefix_json" jdbcType="LONGVARCHAR" property="apiUrlPrefixJson"/>
+    </resultMap>
+
+    <resultMap id="mapResult"   type="HashMap">
+        <result column="sys_key" property="sysKey"/>
+        <result column="sys_context" property="sysContext" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, sys_name, sys_key, create_by, create_time, modified_by, modified_time
+  </sql>
+    <sql id="Blob_Column_List">
+    sys_context
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from urc_permission
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+
+    <select id="getPermissionBySysKey" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from urc_permission
+        where sys_key = #{sysKey}
+        limit 1
+    </select>
+
+    <!--根据roleId获取对应的系统功能权限数据-->
+    <select id="getSysContextByRoleId" resultType="com.yks.urc.entity.PermissionDO">
+    select
+    up.sys_key,up.sys_context
+    from urc_role_permission urp
+    left join urc_permission up on urp.sys_key = up.sys_key
+    where urp.role_id=#{roleId}
+  </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_permission
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <delete id="deleteSyspermitDefine">
+        delete from urc_permission
+        WHERE sys_key IN
+        <foreach item="item" index="index" collection="lstPermit" open="(" separator="," close=")">
+            #{item.sysKey}
+        </foreach>
+    </delete>
+
+    <insert id="insertSysPermitDefine">
+        insert into urc_permission (id, sys_name, sys_key,create_by, create_time, modified_by, modified_time,
+        sys_context)
+        values
+        <foreach collection="lstPermit" item="mem" index="index"
+                 separator=",">
+            (
+            #{mem.id,jdbcType=BIGINT}, #{mem.sysName,jdbcType=CHAR}, #{mem.sysKey,jdbcType=CHAR},
+            #{mem.createBy,jdbcType=VARCHAR}, #{mem.createTime,jdbcType=TIMESTAMP},
+            #{mem.modifiedBy,jdbcType=VARCHAR},#{mem.modifiedTime,jdbcType=TIMESTAMP},
+            #{mem.sysContext,jdbcType=LONGVARCHAR}
+            )
+        </foreach>
+    </insert>
+    <!--获取systemKey-->
+    <select id="getSystemKey" resultMap="BaseResultMap">
+    SELECT  sys_key,sys_context FROM urc_permission WHERE sys_key =#{sysKey}
+  </select>
+
+    <!--获取systemName-->
+    <!-- <select id="getSysKeyAndName" resultMap="BaseResultMap">
+       SELECT  sys_key,sys_name FROM urc_permission WHERE sys_key  IN
+       <foreach collection="list" index="index" item="sysKey" open="(" separator="," close=")">
+         #{sysKey}
+       </foreach>
+     </select>-->
+    <select id="getPermission" resultType="com.yks.urc.entity.PermissionDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM urc_permission
+        WHERE sys_key =#{sysKey}
+    </select>
+
+    <select id="getAllSysPermit" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from urc_permission
+    </select>
+
+    <select id="getSysApiUrlPrefix" resultMap="BaseResultMap">
+  	SELECT  sys_key,api_url_prefix_json FROM urc_permission
+  	where api_url_prefix_json is not null or api_url_prefix_json!=''
+  </select>
+  
+  
+      <!--得到所有的key\context-->
+    <select id="getAllSysKey" resultType="com.yks.urc.entity.PermissionDO">
+		SELECT sys_key, sys_context FROM  urc_permission 
+    </select>
+
+    <update id="updateSysContextBySysKey">
+        update urc_permission
+        set sys_context=#{sysContext},modified_by=#{modifiedBy},modified_time=now(3)
+        where sys_key=#{sysKey}
+    </update>
+
+    <select id="perMissionMap" resultType="com.yks.urc.entity.PermissionDO">
+        select sys_key,sys_name from urc_permission
+    </select>
+</mapper>

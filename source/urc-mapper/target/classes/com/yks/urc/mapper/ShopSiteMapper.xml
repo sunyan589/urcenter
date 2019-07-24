@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.ShopSiteMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.ShopSiteDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="platform_id" jdbcType="VARCHAR" property="platformId" />
+    <result column="shop" jdbcType="VARCHAR" property="shop"/>
+    <result column="shop_system" jdbcType="VARCHAR" property="shopSystem"/>
+    <result column="seller_id" jdbcType="VARCHAR" property="sellerId"/>
+    <result column="site_id" jdbcType="VARCHAR" property="siteId" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, platform_id, shop,shop_system ,seller_id, site_id, site_name,create_time,create_by,modified_time,modified_by
+  </sql>
+
+  <!--清除表-->
+  <delete id="deleteShopSite">
+    DELETE from urc_shop_site
+  </delete>
+  <!--插入-->
+  <insert id="insertShopSite" parameterType="com.yks.urc.entity.ShopSiteDO">
+    insert into urc_shop_site
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="platformId != null">
+        platform_id,
+      </if>
+      <if test="shop != null">
+        shop,
+      </if>
+      <if test="shopSystem != null">
+        shop_system,
+      </if>
+      <if test="sellerId != null">
+        seller_id,
+      </if>
+      <if test="siteId != null">
+        site_id,
+      </if>
+      <if test="siteName != null">
+        site_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="platformId != null">
+        #{platformId,jdbcType=CHAR},
+      </if>
+      <if test="shop != null">
+        #{shop,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSystem != null">
+        #{shopSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null">
+        #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+    <insert id="insertBatchShopSite"  parameterType="com.yks.urc.entity.ShopSiteDO">
+      insert into urc_shop_site
+      (platform_id,shop,shop_system,seller_id,site_id,site_name,create_time,create_by,modified_time,modified_by)
+      values
+      <foreach collection="shopSiteDOList" item="item" separator=",">
+        (
+        #{item.platformId},
+        #{item.shop},
+        #{item.shopSystem},
+        #{item.sellerId},
+        #{item.siteId},
+        #{item.siteName},
+        #{item.createTime},
+        #{item.createBy},
+        #{item.modifiedTime},
+        #{item.modifiedBy}
+        )
+      </foreach>
+    </insert>
+  <!--通过id获取账号和站点-->
+  <select id="selectShopSiteByPlatformId" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List"/>
+     FROM urc_shop_site WHERE  platform_id = #{platformId}  and seller_id != ''
+  </select>
+
+</mapper>

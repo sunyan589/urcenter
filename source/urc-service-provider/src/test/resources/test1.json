@@ -1,0 +1,28 @@
+{
+  "basicData": {
+    "availableStock": {
+      "visiable": "可见",
+      "unvisiable": "不可见"
+    },
+    "chineseName": {
+      "visiable": "可见",
+      "unvisiable": "不可见"
+    },
+    "costPrice": {
+      "visiable": "可见",
+      "unvisiable": "不可见"
+    },
+    "firstCategory": [{
+      "cateId": "3350",
+      "cateNameCn": "电脑办公",
+      "subCategorys": [{
+        "cateId": "3362",
+        "cateNameCn": "3D打印/3D扫描",
+        "subCategorys": [{
+          "cateId": "7723",
+          "cateNameCn": "3D笔"
+        }]
+      }]
+    }]
+  }
+}

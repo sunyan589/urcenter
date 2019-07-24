@@ -1,0 +1,592 @@
+{
+  "system": {
+    "key": "001",
+    "name": "订单管理系统"
+  },
+  "menu": [
+    {
+      "key": "001-000001",
+      "name": "平台订单",
+      "url": "",
+      "module": [
+        {
+          "key": "001-000001-000001",
+          "name": "速卖通订单",
+          "url": "/order/smtorderlist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000001-000001-001",
+              "name": "批量标记",
+              "url": [
+                "/api/grab/smt/batchMarking"
+              ]
+            },
+            {
+              "key": "001-000001-000001-002",
+              "name": "订单抓取",
+              "url": [
+                "/api/grab/smt/order/orderimport"
+              ]
+            },
+            {
+              "key": "001-000001-000001-003",
+              "name": "标记跟踪号",
+              "url": [
+                "/api/grab/smt/order/sign"
+              ]
+            },
+            {
+              "key": "001-000001-000001-004",
+              "name": "同步订单",
+              "url": [
+                "/api/grab/smt/order/singleSynchro"
+              ]
+            },
+            {
+              "key": "001-000001-000001-005",
+              "name": "查看详情",
+              "url": []
+            },
+            {
+              "key": "001-000001-000001-006",
+              "name": "查看",
+              "url": [
+                "/api/grab/smt/order/list"
+              ]
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000001-000001-000001",
+              "name": "速卖通订单详情",
+              "url": "/order/smtorderlist/smtorderdetail/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000001-000001-000001-001",
+                  "name": "查看",
+                  "url": [
+                    "/api/grab/smt/order/list/detail"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "001-000002",
+      "name": "订单管理",
+      "url": "",
+      "module": [
+        {
+          "key": "001-000002-000001",
+          "name": "全部订单",
+          "url": "/order/orderlist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000002-000001-001",
+              "name": "查看",
+              "url": [
+                "/api/oms/order/list"
+              ]
+            },
+            {
+              "key": "001-000002-000001-002",
+              "name": "查看详情",
+              "url": []
+            },
+            {
+              "key": "001-000002-000001-003",
+              "name": "导出订单列表",
+              "url": [
+                "/api/oms/order/export"
+              ]
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000002-000001-000001",
+              "name": "全部订单详情",
+              "url": "/order/orderlist/orderdetail/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000002-000001-000001-001",
+                  "name": "查看",
+                  "url": [
+                    "/api/oms/order/list/detail"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "001-000002-000002",
+          "name": "异常订单",
+          "url": "/order/exceptionorderlist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000002-000002-001",
+              "name": "查看",
+              "url": [
+                "/api/oms/order/exception"
+              ]
+            },
+            {
+              "key": "001-000002-000002-002",
+              "name": "查看详情",
+              "url": []
+            },
+            {
+              "key": "001-000002-000002-003",
+              "name": "导出订单列表",
+              "url": [
+                "/api/oms/order/export"
+              ]
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000002-000002-000001",
+              "name": "异常订单详情",
+              "url": "/order/exceptionorderlist/exceptionorderdetail/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000002-000002-000001-001",
+                  "name": "查看",
+                  "url": [
+                    "/api/oms/order/list/detail"
+                  ]
+                },
+                {
+                  "key": "001-000002-000002-000001-002",
+                  "name": "撤单",
+                  "url": [
+                    "/api/oms/order/list/detail/examine"
+                  ]
+                },
+                {
+                  "key": "001-000002-000002-000001-003",
+                  "name": "修改收货地址",
+                  "url": "/api/oms/order/list/detail/address"
+                },
+                {
+                  "key": "001-000002-000002-000001-004",
+                  "name": "我要留言",
+                  "url": [
+                    "/api/oms/order/list/detail/remarks"
+                  ]
+                },
+                {
+                  "key": "001-000002-000002-000001-005",
+                  "name": "添加商品",
+                  "url": [
+                    "/api/oms/order/updateGoods"
+                  ]
+                },
+                {
+                  "key": "001-000002-000002-000001-006",
+                  "name": "修改商品",
+                  "url": [
+                    "/api/oms/order/updateGoods"
+                  ]
+                },
+                {
+                  "key": "001-000002-000002-000001-007",
+                  "name": "手工分仓",
+                  "url": [
+                    "/api/oms/order/split"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "001-000003",
+      "name": "分仓订单",
+      "url": "",
+      "module": [
+        {
+          "key": "001-000003-000001",
+          "name": "分仓订单",
+          "url": "/order/deliveryparcellist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000003-000001-001",
+              "name": "查看",
+              "url": [
+                "/api/oms/package/list"
+              ]
+            },
+            {
+              "key": "001-000003-000001-002",
+              "name": "查看详情",
+              "url": []
+            },
+            {
+              "key": "001-000003-000001-003",
+              "name": "导出订单列表",
+              "url": [
+                "/api/oms/package/export"
+              ]
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000003-000001-000001",
+              "name": "分仓订单详情",
+              "url": "/order/deliveryparcellist/deliveryparceldetail/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000003-000001-000001-001",
+                  "name": "查看",
+                  "url": [
+                    "/api/oms/package/detail"
+                  ]
+                },
+                {
+                  "key": "001-000003-000001-000001-002",
+                  "name": "物流面单",
+                  "url": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "001-000003-000002",
+          "name": "负利润审核",
+          "url": "/order/negativeprofitauditdetailfail/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000003-000002-001",
+              "name": "查看",
+              "url": [
+                "/api/oms/package/deficit"
+              ]
+            },
+            {
+              "key": "001-000003-000002-002",
+              "name": "查看详情",
+              "url": []
+            },
+            {
+              "key": "001-000003-000002-003",
+              "name": "批量审核",
+              "url": [
+                "/api/oms/package/examine"
+              ]
+            },
+            {
+              "key": "001-000003-000002-003",
+              "name": "批量撤单",
+              "url": [
+                "/api/oms/package/examine"
+              ]
+            },
+            {
+              "key": "001-000003-000002-003",
+              "name": "审核/撤单",
+              "url": [
+                "/api/oms/package/examine"
+              ]
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000003-000002-000001",
+              "name": "负利润详情",
+              "url": "/order/negativeprofitauditdetailfail/negativeprofitauditdetailfail/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000003-000002-000001-001",
+                  "name": "查看",
+                  "url": [
+                    "/api/oms/package/detail"
+                  ]
+                },
+                {
+                  "key": "001-000003-000002-000001-002",
+                  "name": "审核",
+                  "url": [
+                    "/api/oms/package/examine"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "001-000004",
+      "name": "系统配置",
+      "url": "",
+      "module": [
+        {
+          "key": "001-000004-000001",
+          "name": "平台授权",
+          "url": "/order/systemconfig/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000004-000001-001",
+              "name": "查看",
+              "url": [
+                "/api/grab/smt/auto/list"
+              ]
+            },
+            {
+              "key": "001-000004-000001-002",
+              "name": "授权店铺",
+              "url": [
+                "/api/grab/smt/auto/add"
+              ]
+            },
+            {
+              "key": "001-000004-000001-003",
+              "name": "重新授权",
+              "url": []
+            },
+            {
+              "key": "001-000004-000001-004",
+              "name": "修改",
+              "url": [
+                "/api/grab/smt/auto/add"
+              ]
+            },
+            {
+              "key": "001-000004-000001-005",
+              "name": "删除",
+              "url": [
+                "/api/grab/smt/auto/delete"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "001-000005",
+      "name": "订单配置",
+      "url": "",
+      "module": [
+        {
+          "key": "001-000005-000001",
+          "name": "抓单转换",
+          "url": "/order/conversion/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000005-000001-001",
+              "name": "字段配置",
+              "url": [
+                "/api/grab/package/conversion/addAndUpdateFieldConfig",
+                "/api/grab/package/conversion/fieldConfigDetail"
+              ]
+            },
+            {
+              "key": "001-000005-000001-002",
+              "name": "SKU解析配置",
+              "url": [
+                "/api/grab/package/conversion/editskuoperation",
+                "/api/grab/package/conversion/saveskuoperation",
+                "/api/grab/package/conversion/saveskuchars",
+                "/api/grab/package/conversion/deleteskuoperation",
+                "/api/grab/package/conversion/deleteskuchars"
+              ]
+            },
+            {
+              "key": "001-000005-000001-003",
+              "name": "增加条件配置",
+              "url": [
+                "/api/grab/package/conversion/saveConditionConfig"
+              ]
+            },
+            {
+              "key": "001-000005-000001-004",
+              "name": "修改条件配置",
+              "url": [
+                "/api/grab/package/conversion/conditionDetail",
+                "/api/grab/package/conversion/saveConditionConfig"
+              ]
+            },
+            {
+              "key": "001-000005-000001-004",
+              "name": "删除条件配置",
+              "url": [
+                "/api/grab/package/conversion/deleteconfig"
+              ]
+            }
+          ],
+          "module": []
+        },
+        {
+          "key": "001-000005-000002",
+          "name": "渠道标记",
+          "url": "/order/channellist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000005-000002-001",
+              "name": "查看",
+              "url": "/api/oms/config/channel/list"
+            },
+            {
+              "key": "001-000005-000002-002",
+              "name": "查看详情",
+              "url": ""
+            },
+            {
+              "key": "001-000005-000002-003",
+              "name": "新增",
+              "url": ""
+            },
+            {
+              "key": "001-000005-000002-003",
+              "name": "修改",
+              "url": ""
+            },
+            {
+              "key": "001-000005-000002-003",
+              "name": "删除",
+              "url": "/api/oms/config/channel/delete"
+            }
+          ],
+          "module": [
+            {
+              "key": "001-000005-000002-000001",
+              "name": "渠道标记详情",
+              "url": "/order/channellist/channelsignall/",
+              "show": 0,
+              "function": [
+                {
+                  "key": "001-000005-000002-000001-001",
+                  "name": "查看",
+                  "url": "/api/oms/config/channel/mapping/detail"
+                },
+                {
+                  "key": "001-000003-000002-000001-002",
+                  "name": "修改渠道信息",
+                  "url": "/api/oms/config/channel/save"
+                },
+                {
+                  "key": "001-000003-000002-000001-003",
+                  "name": "修改仓库信息",
+                  "url": "/api/oms/config/channel/warehouse/save"
+                },
+                {
+                  "key": "001-000003-000002-000001-004",
+                  "name": "修改第三方信息",
+                  "url": "/api/oms/config/channel/mapping/save"
+                },
+                {
+                  "key": "001-000003-000002-000001-005",
+                  "name": "修改标记信息",
+                  "url": "/api/oms/config/channel/sign/save"
+                },
+                {
+                  "key": "001-000003-000002-000001-006",
+                  "name": "修改标记信息",
+                  "url": "/api/oms/config/channel/sign/delete"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "001-000005-000003",
+          "name": "指定发货仓",
+          "url": "/order/warehouselist/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000005-000003-001",
+              "name": "查看列表",
+              "url": "/api/oms/config/warehouse/list"
+            },
+            {
+              "key": "001-000005-000003-002",
+              "name": "查看详情",
+              "url": "/api/oms/config/warehouse/detail"
+            },
+            {
+              "key": "001-000005-000003-003",
+              "name": "新增",
+              "url": ""
+            },
+            {
+              "key": "001-000005-000003-004",
+              "name": "修改",
+              "url": "/api/oms/config/warehouse/detail"
+            },
+            {
+              "key": "001-000005-000003-005",
+              "name": "保存修改",
+              "url": "/api/oms/config/warehouse/save"
+            },
+            {
+              "key": "001-000005-000003-006",
+              "name": "删除",
+              "url": "/api/oms/config/warehouse/delete"
+            }
+          ],
+          "module": []
+        },
+        {
+          "key": "001-000005-000004",
+          "name": "收货人信息拦截",
+          "url": "/order/orderconsignee/",
+          "show": 1,
+          "function": [
+            {
+              "key": "001-000005-000004-001",
+              "name": "查看列表",
+              "url": "/api/oms/config/addressee/list"
+            },
+            {
+              "key": "001-000005-000004-002",
+              "name": "查看详情",
+              "url": "/api/oms/config/addressee/detail"
+            },
+            {
+              "key": "001-000005-000004-003",
+              "name": "新增",
+              "url": ""
+            },
+            {
+              "key": "001-000005-000004-004",
+              "name": "修改",
+              "url": "/api/oms/config/addressee/detail"
+            },
+            {
+              "key": "001-000005-000003-005",
+              "name": "保存修改",
+              "url": "/api/oms/config/addressee/save"
+            },
+            {
+              "key": "001-000005-000003-006",
+              "name": "删除",
+              "url": "/api/oms/config/addressee/delete"
+            }
+          ],
+          "module": []
+        }
+      ]
+    }
+  ]
+}

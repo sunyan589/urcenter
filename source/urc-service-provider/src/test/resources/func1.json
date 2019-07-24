@@ -1,0 +1,168 @@
+{
+    "menu": [{
+        "key": "008-000001",
+        "module": [{
+            "function": [{
+                "key": "008-000001-000001-001",
+                "name": "查看"
+            },
+                {
+                    "key": "008-000001-000001-002",
+                    "name": "新增/修改"
+                },
+                {
+                    "key": "008-000001-000001-003",
+                    "name": "刊登/批量"
+                },
+                {
+                    "key": "008-000001-000001-004",
+                    "name": "修改库存/批量"
+                },
+                {
+                    "key": "008-000001-000001-005",
+                    "name": "修改价格/批量"
+                },
+                {
+                    "key": "008-000001-000001-006",
+                    "name": "删除/批量"
+                },
+                {
+                    "key": "008-000001-000001-007",
+                    "name": "上架/批量"
+                },
+                {
+                    "key": "008-000001-000001-008",
+                    "name": "下架/批量"
+                },
+                {
+                    "key": "008-000001-000001-009",
+                    "name": "查看日志"
+                }],
+            "key": "008-000001-000001",
+            "module": [{
+                "function": [{
+                    "key": "008-000001-000001-000001-001",
+                    "name": "查看"
+                }],
+                "key": "008-000001-000001-000001",
+                "module": [],
+                "name": "listing详情",
+                "pageFullPathName": "",
+                "show": 1,
+                "url": "/publish/listing/list/detail/"
+            }],
+            "name": "listing列表",
+            "pageFullPathName": "",
+            "show": 1,
+            "url": "/publish/listing/list/"
+        },
+            {
+                "function": [],
+                "key": "008-000001-000002",
+                "module": [{
+                    "function": [{
+                        "key": "008-000001-000002-000001-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "008-000001-000002-000001-002",
+                            "name": "新增/修改"
+                        },
+                        {
+                            "key": "008-000001-000002-000001-003",
+                            "name": "删除/批量"
+                        }],
+                    "key": "008-000001-000002-000001",
+                    "module": [],
+                    "name": "描述模板",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/publish/template/describe/"
+                },
+                    {
+                        "function": [{
+                            "key": "008-000001-000002-000002-001",
+                            "name": "查看"
+                        }],
+                        "key": "008-000001-000002-000002",
+                        "module": [],
+                        "name": "运输模板",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/publish/template/transport/"
+                    },
+                    {
+                        "function": [{
+                            "key": "008-000001-000002-000003-001",
+                            "name": "查看"
+                        }],
+                        "key": "008-000001-000002-000003",
+                        "module": [],
+                        "name": "退货模板",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/publish/template/return/"
+                    },
+                    {
+                        "function": [{
+                            "key": "008-000001-000002-000004-001",
+                            "name": "查看"
+                        }],
+                        "key": "008-000001-000002-000004",
+                        "module": [],
+                        "name": "付款模板",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/publish/template/payment/"
+                    }],
+                "name": "模板管理",
+                "pageFullPathName": "",
+                "show": 1,
+                "url": "/publish/template/"
+            },
+            {
+                "function": [{
+                    "key": "008-000001-000003-001",
+                    "name": "查看"
+                }],
+                "key": "008-000001-000003",
+                "module": [],
+                "name": "库存价格队列",
+                "pageFullPathName": "",
+                "show": 1,
+                "url": "/publish/queue/list/"
+            }],
+        "name": "eBay刊登",
+        "url": "/publish/"
+    },
+        {
+            "key": "008-000002",
+            "module": [{
+                "function": [{
+                    "key": "008-000002-000001-001",
+                    "name": "查看"
+                },
+                    {
+                        "key": "008-000002-000001-002",
+                        "name": "新增/修改"
+                    },
+                    {
+                        "key": "008-000002-000001-003",
+                        "name": "删除"
+                    }],
+                "key": "008-000002-000001",
+                "module": [],
+                "name": "图库设置",
+                "pageFullPathName": "",
+                "show": 1,
+                "url": "/publish/setting/basicsetimgset/"
+            }],
+            "name": "基础设置",
+            "url": "/publish/"
+        }],
+    "system": {
+        "key": "008",
+        "name": "刊登",
+        "url": "/publish/"
+    }
+}

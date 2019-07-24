@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IUserMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.UserDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+        <result column="active_time" jdbcType="TIMESTAMP" property="activeTime"/>
+        <result column="ding_user_id" jdbcType="VARCHAR" property="dingUserId"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+    
+    
+    <resultMap id="BaseUserResultMap" type="com.yks.urc.entity.UserDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="is_active" jdbcType="TINYINT" property="isActive"/>
+        <result column="active_time" jdbcType="TIMESTAMP" property="activeTime"/>
+        <result column="ding_user_id" jdbcType="VARCHAR" property="dingUserId"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, user_name, is_active, active_time, ding_user_id, create_by, create_time, modified_by, 
+    modified_time
+  </sql>
+    <!--根据roleId查询用户-->
+    <select id="listUsersByRoleId" parameterType="java.lang.String" resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user
+        where exists
+        (select user_name from urc_user_role where role_id=#{roleId,jdbcType=BIGINT})
+    </select>
+    
+    
+    
+    <select id="fuzzySearchUsersByUserName"  resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user
+        <where>
+        	<if test=" userName !=null and userName != '' ">
+        		  user_name  LIKE CONCAT(CONCAT('%',#{userName},'%'))
+        	</if>
+        	<if test=" createBy !=null and createBy != '' ">
+        		  and  create_by = #{createBy}
+        	</if>
+        		 and is_active=1  
+        </where>
+        
+         limit #{offset},#{limit}
+    </select>
+    
+        
+    <select id="fuzzySearchUsersByUserNameCount"  resultType="java.lang.Integer">
+        select count(1)  from urc_user 
+        <where>
+        	<if test=" userName !=null and userName != '' ">
+        		  user_name  LIKE CONCAT(CONCAT('%',#{userName},'%'))
+        	</if>
+        	<if test=" createBy !=null and createBy != '' ">
+        		  and  create_by = #{createBy}
+        	</if>
+        		  and is_active=1 
+        </where>
+    </select>
+    
+    
+    <select id="getUserInfoByDingUserId" parameterType="java.lang.String" resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user 
+        where ding_user_id = #{userId,jdbcType=VARCHAR}
+    </select>
+    
+    
+     <select id="getUserByRoleId" parameterType="com.yks.urc.entity.UserRoleDO" resultMap="BaseUserResultMap">
+			SELECT uu.* from urc_user uu 
+			 INNER JOIN urc_user_role uur ON uu.user_name=uur.user_name
+			 <where>
+			 		<if test="roleId != null ">
+			 			uur.role_id=#{roleId,jdbcType=VARCHAR} 
+			 		</if>
+			 		
+			 		<if test="createBy != null and createBy != '' ">
+			 			and uur.create_by=#{createBy,jdbcType=VARCHAR} 
+			 		</if>
+			 </where>
+    </select>
+    
+<!--    <select id="queryUserDataByRuleId" parameterType="com.yks.urc.entity.DataRuleDO" resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user 
+        where  user_name  in 
+        ( SELECT user_name from urc_data_rule 
+          <where>
+     		 <if test="dataRuleId != null and dataRuleId != '' ">
+     		 	data_rule_id = #{dataRuleId,jdbcType=BIGINT} 
+     		 </if>
+    		 </where> 
+       )
+    </select>
+    
+    <select id="queryUserNoDataByRuleId" parameterType="com.yks.urc.entity.DataRuleDO" resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user 
+        where  user_name  not in 
+        ( SELECT user_name from urc_data_rule 
+          <where>
+     		 <if test="dataRuleId != null and dataRuleId != '' ">
+     		 	data_rule_id = #{dataRuleId,jdbcType=BIGINT} 
+     		 </if>
+    	  </where> 
+       )
+        <if test="userName != null and userName != '' ">
+ 		 	 and user_name  LIKE CONCAT(CONCAT('%',#{userName},'%'))
+ 		</if>
+       
+    </select> -->
+
+
+	<select id="listAllUsersUserName"  resultType="java.lang.String">
+        select
+        user_name as userName 
+        from urc_user 
+    </select>
+    
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseUserResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getPersonNameByUserName" resultType="java.lang.String">
+        select  distinct p.person_name
+        from urc_user u left join urc_person p ON u.ding_user_id=p.ding_user_id
+        where u.user_name=#{userName}
+        limit 1
+    </select>
+    
+   <select id="listUsersUserNameByRoleId"  parameterType="java.lang.Long"  resultType="java.lang.String">
+        select
+        uu.user_name as userName
+        from urc_user uu  left JOIN urc_user_role ur ON ur.user_name=uu.user_name
+    	where ur.role_id  = #{roleId,jdbcType=BIGINT}
+    </select>
+    
+    
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.yks.urc.entity.UserDO">
+    insert into urc_user (id, user_name, is_active, 
+      active_time, ding_user_id, create_by, 
+      create_time, modified_by, modified_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{isActive,jdbcType=TINYINT}, 
+      #{activeTime,jdbcType=TIMESTAMP}, #{dingUserId,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.yks.urc.entity.UserDO">
+        insert into urc_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+            <if test="activeTime != null">
+                active_time,
+            </if>
+            <if test="dingUserId != null">
+                ding_user_id,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifiedBy != null">
+                modified_by,
+            </if>
+            <if test="modifiedTime != null">
+                modified_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="isActive != null">
+                #{isActive,jdbcType=TINYINT},
+            </if>
+            <if test="activeTime != null">
+                #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dingUserId != null">
+                #{dingUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.UserDO">
+        update urc_user
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="isActive != null">
+                is_active = #{isActive,jdbcType=TINYINT},
+            </if>
+            <if test="activeTime != null">
+                active_time = #{activeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dingUserId != null">
+                ding_user_id = #{dingUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.UserDO">
+    update urc_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      is_active = #{isActive,jdbcType=TINYINT},
+      active_time = #{activeTime,jdbcType=TIMESTAMP},
+      ding_user_id = #{dingUserId,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <insert id="insertBatchUser" parameterType="com.yks.urc.entity.UserDO">
+        insert into urc_user
+        (user_name,is_active,active_time,ding_user_id,create_by,modified_by,create_time,modified_time)
+        values
+        <foreach collection="userDoList" item="list" separator=",">
+            (#{list.userName},
+            #{list.isActive},
+            #{list.activeTime},
+            #{list.dingUserId},
+            #{list.createBy},
+            #{list.modifiedBy},
+            #{list.createTime},
+            #{list.modifiedTime})
+
+        </foreach>
+    </insert>
+    <delete id="deleteUrcUser">
+      DELETE FROM urc_user
+    </delete>
+    <!--用户管理搜索用户分页-->
+    <select id="getUsersByUserInfo" parameterType="com.yks.urc.vo.helper.Query" resultType="com.yks.urc.vo.UserVO">
+        select DISTINCT (u.user_name) AS userName ,p.person_name AS personName,u.active_time AS activeTime ,u.is_active AS isActive
+        from urc_user u
+        LEFT JOIN urc_person p on u.ding_user_id = p.ding_user_id
+        LEFT JOIN urc_user_role r on u.user_name=r.user_name
+        <where>
+        <if test="list.size >0">
+         AND   u.user_name  IN
+            <foreach collection="list" index="index" item="userName" open="(" separator="," close=")">
+                      #{userName}
+             </foreach>
+        </if>
+        </where>
+        ORDER BY u.user_name ASC
+        limit #{query.offset},#{query.limit}
+    </select>
+
+    <select id="getUsersByUserInfoCount" parameterType="com.yks.urc.vo.helper.Query" resultType="java.lang.Integer">
+        select count(DISTINCT(u.user_name))
+        from urc_user u
+        LEFT JOIN urc_person p on u.ding_user_id = p.ding_user_id
+        LEFT JOIN urc_user_role r on u.user_name=r.user_name
+        <where>
+        <if test="list.size >0">
+            AND   u.user_name  IN
+            <foreach collection="list" index="index" item="userName" open="(" separator="," close=")">
+                #{userName}
+            </foreach>
+        </if>
+        </where>
+    </select>
+    <select id="getUserByName" resultType="com.yks.urc.entity.UserDO">
+        SELECT <include refid="Base_Column_List"/>
+        FROM  urc_user WHERE  user_name =#{userName}
+    </select>
+    
+    
+    <select id="getUserByUserName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM urc_user
+        	<where>
+        		<if test="userVO.userName != null and userVO.userName != '' ">
+        			 user_name =#{userVO.userName}
+        		</if>
+        		
+        		<if test="userVO.createBy != null and userVO.createBy  != '' ">
+        			 and create_by =#{userVO.createBy}
+        		</if>
+        		
+        		
+        	</where>
+    </select>
+
+    <select id="fuzzSearchUserByName" resultType="com.yks.urc.vo.UserInfoVO">
+      select u.user_name AS userName,p.person_name AS personName,p.ding_user_id AS dingUserId
+      FROM urc_user u LEFT JOIN urc_person p ON  u.ding_user_id = p.ding_user_id
+      WHERE u.user_name LIKE "%"#{name}"%"  OR p.person_name LIKE "%"#{name}"%" OR p.person_name_collage LIKE "%"#{name}"%"
+    </select>
+    
+</mapper>

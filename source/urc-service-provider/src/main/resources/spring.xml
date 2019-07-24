@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <import resource="classpath:/motan/motan-service-config.xml"/>
+    <import resource="classpath:/motan/motan-client-config.xml"/>
+    <import resource="classpath:/spring/*.xml"/>
+    <!-- 扫描对应包下所有使用注解的类型 -->
+    <context:component-scan base-package="com.yks.urc"/>
+
+    <task:annotation-driven />
+    <task:scheduler id="myScheduler" pool-size="5"/>
+
+    <!-- 1.配置properties属性文件：${url}获取值 -->
+    <context:property-placeholder
+            location="classpath:constant.properties,jdbc.properties"/>
+
+    <!-- log aop 配置 -->
+    <bean id="logAspect" class="com.yks.urc.log.LogAspect"/>
+    <aop:config>
+        <aop:aspect ref="logAspect">
+            <aop:pointcut id="p" expression="execution(* com.yks.urc..*.*(..)) and @annotation(log)"/>
+            <aop:around method="around" pointcut-ref="p" arg-names="log"/>
+            <!--<aop:after-returning method="after" pointcut-ref="p" arg-names="jp,log,result" returning="result"/>-->
+        </aop:aspect>
+    </aop:config>
+</beans>

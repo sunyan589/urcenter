@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IDataRuleTemplMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.DataRuleTemplDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="templ_id" jdbcType="BIGINT" property="templId"/>
+        <result column="templ_name" jdbcType="VARCHAR" property="templName"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, templ_id,templ_name, user_name, remark, create_time, create_by, modified_time, modified_by
+  </sql>
+
+    <select id="getMyDataRuleTempl" parameterType="com.yks.urc.entity.DataRuleTemplDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_data_rule_templ
+        <where>
+            <if test="createBy !=null and createBy != '' ">
+                create_by=#{createBy}
+            </if>
+        </where>
+
+        order by create_time desc
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getMyDataRuleTemplCount" parameterType="com.yks.urc.entity.DataRuleTemplDO"
+            resultType="java.lang.Integer">
+        select count(1) from urc_data_rule_templ
+        <where>
+            <if test="createBy !=null and createBy != '' ">
+                create_by=#{createBy}
+            </if>
+        </where>
+    </select>
+
+
+    <!--根据模板Id获取数据-->
+    <select id="selectByTemplId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_data_rule_templ
+        <where>
+            templ_id = #{templId,jdbcType=BIGINT}
+            <if test="createBy != null and createBy != ''">
+                and create_by=#{createBy,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+    <!--分页-->
+    <select id="listDataRuleTemplDOsByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_data_rule_templ
+        <where>
+            <if test="createBy != null and createBy != ''">
+                create_by=#{createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="templNames != null and templNames != ''">
+                and templ_name in
+                <foreach item="item" index="index" collection="templNames" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+        limit #{currIndex},#{pageSize}
+    </select>
+    <!--获取总条目-->
+    <select id="getCounts" parameterType="java.util.HashMap" resultType="java.lang.Long">
+        select count(1) from urc_data_rule_templ
+        <where>
+            <if test="createBy != null and createBy != ''">
+                create_by=#{createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="templNames != null and templNames != ''">
+                and templ_name in
+                <foreach item="item" index="index" collection="templNames" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!--新增-->
+    <insert id="insert" parameterType="com.yks.urc.entity.DataRuleTemplDO">
+        insert into urc_data_rule_templ (templ_id, templ_name, user_name,
+        remark, create_time, create_by, modified_time, modified_by)
+        values (#{templId,jdbcType=BIGINT}, #{templName,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}
+        , #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR})
+    </insert>
+    <!--根据templ_id删除记录-->
+    <delete id="deleteByTemplId" parameterType="java.lang.Long">
+        delete from urc_data_rule_templ
+        where templ_id = #{templId,jdbcType=BIGINT}
+    </delete>
+
+    <!--根据templId列表和createBy删除 权限模板数据-->
+    <delete id="delTemplByIdsAndCreatBy">
+        delete from urc_data_rule_templ
+        where templ_id in
+        <foreach collection="templIds" item="templId" open="(" separator="," close=")">
+            #{templId}
+        </foreach>
+        <if test="createBy != null and createBy!=''">
+            and create_by = #{createBy,jdbcType=VARCHAR}
+        </if>
+    </delete>
+
+    <!--根据tempId 修改方案模板信息-->
+    <update id="updateDataRuleTemplById" parameterType="com.yks.urc.entity.DataRuleTemplDO">
+        update urc_data_rule_templ
+        <set>
+            <if test="templName != null and templName!=''">
+                templ_name = #{templName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName!=''">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null and modifiedBy!=''">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where templ_id = #{templId,jdbcType=BIGINT}
+    </update>
+    <!--判断给定的方案名是否重复-->
+    <select id="checkDuplicateTemplName" resultType="Boolean">
+        SELECT COUNT(id) > 0 FROM urc_data_rule_templ drt
+        <where>
+            drt.templ_name = #{newTemplName}
+            <if test="templId != null">
+                and drt.templ_id != #{templId}
+            </if>
+        </where>
+    </select>
+</mapper>

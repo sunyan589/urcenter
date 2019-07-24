@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.DataRuleObjMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.DataRuleObj">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="auth_way_id" jdbcType="BIGINT" property="authWayId" />
+    <result column="entity_code" jdbcType="VARCHAR" property="entityCode" />
+    <result column="obj_name" jdbcType="VARCHAR" property="objName" />
+    <result column="sort_idx" jdbcType="TINYINT" property="sortIdx" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, auth_way_id, entity_code, obj_name, sort_idx, create_time, create_by, modified_time, 
+    modified_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from urc_data_rule_obj
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_data_rule_obj
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yks.urc.entity.DataRuleObj">
+    insert into urc_data_rule_obj (id, auth_way_id, entity_code, 
+      obj_name, sort_idx, create_time, 
+      create_by, modified_time, modified_by
+      )
+    values (#{id,jdbcType=BIGINT}, #{authWayId,jdbcType=BIGINT}, #{entityCode,jdbcType=VARCHAR}, 
+      #{objName,jdbcType=VARCHAR}, #{sortIdx,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yks.urc.entity.DataRuleObj">
+    insert into urc_data_rule_obj
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="authWayId != null">
+        auth_way_id,
+      </if>
+      <if test="entityCode != null">
+        entity_code,
+      </if>
+      <if test="objName != null">
+        obj_name,
+      </if>
+      <if test="sortIdx != null">
+        sort_idx,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="authWayId != null">
+        #{authWayId,jdbcType=BIGINT},
+      </if>
+      <if test="entityCode != null">
+        #{entityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="objName != null">
+        #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIdx != null">
+        #{sortIdx,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.DataRuleObj">
+    update urc_data_rule_obj
+    <set>
+      <if test="authWayId != null">
+        auth_way_id = #{authWayId,jdbcType=BIGINT},
+      </if>
+      <if test="entityCode != null">
+        entity_code = #{entityCode,jdbcType=VARCHAR},
+      </if>
+      <if test="objName != null">
+        obj_name = #{objName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortIdx != null">
+        sort_idx = #{sortIdx,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.DataRuleObj">
+    update urc_data_rule_obj
+    set auth_way_id = #{authWayId,jdbcType=BIGINT},
+      entity_code = #{entityCode,jdbcType=VARCHAR},
+      obj_name = #{objName,jdbcType=VARCHAR},
+      sort_idx = #{sortIdx,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

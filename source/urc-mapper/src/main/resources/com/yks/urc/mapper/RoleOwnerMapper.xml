@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.RoleOwnerMapper">
+  <resultMap id="BaseResultMap" type="com.yks.urc.entity.RoleOwnerDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="role_owner" jdbcType="VARCHAR" property="owner"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_id, role_owner,create_time, create_by, modified_time, modified_by
+  </sql>
+
+  <select id="selectOwnerByRoleId" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM urc_role_owner
+    WHERE role_id =#{roleId}
+  </select>
+  <select id="selectOwnerByOwner" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM urc_role_owner
+    WHERE role_owner =#{owner}
+  </select>
+    <!--插入-->
+  <insert id="insertOwner" parameterType="com.yks.urc.entity.RoleOwnerDO">
+    INSERT  INTO  urc_role_owner
+    (role_id,role_owner,create_time,create_by, modified_time, modified_by)
+    VALUES (
+      #{roleId},
+      #{owner},
+      #{createTime},
+      #{createBy},
+      #{modifiedTime},
+      #{modifiedBy}
+    )
+
+  </insert>
+  <!--通过roleId  删除owner ,不能删除 owner为创建者-->
+  <delete id="deleteOwnerByRoleId" parameterType="java.lang.Long">
+    DELETE FROM urc_role_owner WHERE role_id =#{roleId}
+  </delete>
+  <!--通过roleId 更新owner-->
+  <update id="updateOwnerByRoleId" parameterType="com.yks.urc.entity.RoleOwnerDO">
+    UPDATE urc_role_owner
+    SET role_owner =#{owner},
+    modified_by =#{modifiedBy},
+    modified_time =#{modifiedTime}
+    WHERE  role_id =#{roleId}
+  </update>
+
+  <select id="judgeOwnerByOwnerAndId" resultType="java.lang.Integer">
+    SELECT count(*)
+    FROM urc_role_owner
+    WHERE role_owner =#{owner} and role_id =#{roleId}
+  </select>
+
+</mapper>

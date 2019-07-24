@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yks.urc.mapper.IExpressionMapper">
+    <resultMap id="BaseResultMap" type="com.yks.urc.entity.ExpressionDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="expression_id" jdbcType="BIGINT" property="expressionId"/>
+        <result column="data_rule_sys_id" jdbcType="BIGINT" property="dataRuleSysId"/>
+        <result column="field_code" jdbcType="VARCHAR" property="fieldCode"/>
+        <result column="entity_code" jdbcType="VARCHAR" property="entityCode"/>
+        <result column="oper" jdbcType="VARCHAR" property="oper"/>
+        <result column="parent_expression_id" jdbcType="BIGINT" property="parentExpressionId"/>
+        <result column="is_and" jdbcType="TINYINT" property="isAnd"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime"/>
+        <result column="modified_by" jdbcType="VARCHAR" property="modifiedBy"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yks.urc.entity.ExpressionDO">
+        <result column="oper_values" jdbcType="LONGVARCHAR" property="operValues"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, expression_id,data_rule_sys_id, field_code, entity_code, oper, parent_expression_id, is_and, create_time, 
+    create_by, modified_time, modified_by
+  </sql>
+  
+  <sql id="Base_SYS_Column_List">
+    ue.id, ue.expression_id,ue.data_rule_sys_id, ue.field_code, ue.entity_code, ue.oper, ue.parent_expression_id, ue.is_and, ue.create_time, 
+    ue.create_by, ue.modified_time, ue.modified_by
+  </sql>
+    <sql id="Blob_Column_List">
+    oper_values
+  </sql>
+    <!--获取条件表达式 list列表-->
+    <select id="listExpressionDOs" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        from urc_expression where expression_id  in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    
+    
+    <!--获取条件表达式 list列表-->
+    <select id="listExpressionDOsBySysKey"  parameterType="java.lang.Long"  resultMap="ResultMapWithBLOBs">
+        SELECT 
+			<include refid="Base_SYS_Column_List"/> , <include refid="Blob_Column_List"/>   
+		FROM
+			urc_expression ue
+		LEFT JOIN urc_data_rule_sys udrs ON ue.data_rule_sys_id = udrs.data_rule_sys_id  
+		WHERE  
+			ue.data_rule_sys_id =#{dataRuleSysId} 
+    </select>
+    
+    
+    <!--insert-->
+    <insert id="insert" parameterType="com.yks.urc.entity.ExpressionDO">
+        insert into urc_expression ( expression_id,data_rule_sys_id, field_code,
+        entity_code, oper,oper_values, parent_expression_id,
+        is_and, create_time, create_by,
+        modified_time, modified_by
+        )
+        values ( #{expressionId,jdbcType=BIGINT}, #{dataRuleSysId,jdbcType=BIGINT},
+        #{fieldCode,jdbcType=VARCHAR}, #{entityCode,jdbcType=VARCHAR},
+        #{oper,jdbcType=VARCHAR}, #{operValues,jdbcType=LONGVARCHAR},
+        #{parentExpressionId,jdbcType=BIGINT}, #{isAnd,jdbcType=TINYINT},
+        #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <!--insertBatch-->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into urc_expression ( expression_id,data_rule_sys_id, field_code,
+        entity_code, oper,oper_values, parent_expression_id,
+        is_and, create_time, create_by,
+        modified_time, modified_by)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.expressionId,jdbcType=BIGINT}, #{item.dataRuleSysId,jdbcType=BIGINT},
+            #{item.fieldCode,jdbcType=VARCHAR}, #{item.entityCode,jdbcType=VARCHAR},
+            #{item.oper,jdbcType=VARCHAR}, #{item.operValues,jdbcType=LONGVARCHAR},
+            #{item.parentExpressionId,jdbcType=BIGINT},#{item.isAnd,jdbcType=TINYINT},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.createBy,jdbcType=VARCHAR},
+            #{item.modifiedTime,jdbcType=TIMESTAMP}, #{item.modifiedBy,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from urc_expression
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from urc_expression
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.yks.urc.entity.ExpressionDO">
+        update urc_expression
+        <set>
+            <if test="expressionId != null">
+                expression_id = #{expressionId,jdbcType=BIGINT},
+            </if>
+            <if test="fieldCode != null">
+                field_code = #{fieldCode,jdbcType=VARCHAR},
+            </if>
+            <if test="entityCode != null">
+                entity_code = #{entityCode,jdbcType=VARCHAR},
+            </if>
+            <if test="oper != null">
+                oper = #{oper,jdbcType=VARCHAR},
+            </if>
+            <if test="parentExpressionId != null">
+                parent_expression_id = #{parentExpressionId,jdbcType=BIGINT},
+            </if>
+            <if test="isAnd != null">
+                is_and = #{isAnd,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedBy != null">
+                modified_by = #{modifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="operValues != null">
+                oper_values = #{operValues,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yks.urc.entity.ExpressionDO">
+    update urc_expression
+    set expression_id = #{expressionId,jdbcType=BIGINT},
+      field_code = #{fieldCode,jdbcType=VARCHAR},
+      entity_code = #{entityCode,jdbcType=VARCHAR},
+      oper = #{oper,jdbcType=VARCHAR},
+      parent_expression_id = #{parentExpressionId,jdbcType=BIGINT},
+      is_and = #{isAnd,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR},
+      oper_values = #{operValues,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.yks.urc.entity.ExpressionDO">
+    update urc_expression
+    set expression_id = #{expressionId,jdbcType=BIGINT},
+      field_code = #{fieldCode,jdbcType=VARCHAR},
+      entity_code = #{entityCode,jdbcType=VARCHAR},
+      oper = #{oper,jdbcType=VARCHAR},
+      parent_expression_id = #{parentExpressionId,jdbcType=BIGINT},
+      is_and = #{isAnd,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

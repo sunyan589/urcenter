@@ -1,0 +1,329 @@
+{
+    "operator": "panyun",
+    "pwd": "com.yks.urc.123456",
+    "ticket": "f96d0e4d01701baf0a1773c0095314de",
+    "data": [{
+        "menu": [{
+            "key": "015-000002",
+            "module": [{
+                "function": [{
+                    "key": "015-000002-000001-001",
+                    "name": "查看"
+                },
+                    {
+                        "key": "015-000002-000001-002",
+                        "name": "编辑"
+                    }],
+                "key": "015-000002-000001",
+                "module": [],
+                "name": "商标商品分类",
+                "pageFullPathName": "",
+                "show": 1,
+                "url": "/compliance/setting/trademark/"
+            },
+                {
+                    "function": [{
+                        "key": "015-000002-000002-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "015-000002-000002-002",
+                            "name": "新增/编辑"
+                        },
+                        {
+                            "key": "015-000002-000002-003",
+                            "name": "删除"
+                        }],
+                    "key": "015-000002-000002",
+                    "module": [],
+                    "name": "知产代码设置",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/compliance/setting/riskcode/"
+                },
+                {
+                    "function": [{
+                        "key": "015-000002-000003-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "015-000002-000003-002",
+                            "name": "新增/编辑"
+                        },
+                        {
+                            "key": "015-000002-000003-003",
+                            "name": "删除"
+                        }],
+                    "key": "015-000002-000003",
+                    "module": [],
+                    "name": "图形分类设置",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/compliance/setting/trademarkclass/"
+                },
+                {
+                    "function": [{
+                        "key": "015-000002-000004-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "015-000002-000004-002",
+                            "name": "新增/编辑"
+                        },
+                        {
+                            "key": "015-000002-000004-003",
+                            "name": "删除"
+                        }],
+                    "key": "015-000002-000004",
+                    "module": [],
+                    "name": "特批销售账号",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/compliance/setting/permitSaleAccount/"
+                },
+                {
+                    "function": [{
+                        "key": "015-000002-000005-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "015-000002-000005-002",
+                            "name": "新增/编辑"
+                        },
+                        {
+                            "key": "015-000002-000005-003",
+                            "name": "删除"
+                        }],
+                    "key": "015-000002-000005",
+                    "module": [],
+                    "name": "审核人员设置",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/compliance/setting/reviewersSettting/"
+                }],
+            "name": "基础设置",
+            "url": "/compliance/"
+        },
+            {
+                "key": "015-000001",
+                "module": [{
+                    "function": [{
+                        "key": "015-000001-000001-001",
+                        "name": "查看"
+                    },
+                        {
+                            "key": "015-000001-000001-002",
+                            "name": "新增/编辑"
+                        },
+                        {
+                            "key": "015-000001-000001-003",
+                            "name": "启用/批量"
+                        },
+                        {
+                            "key": "015-000001-000001-004",
+                            "name": "停用/批量"
+                        },
+                        {
+                            "key": "015-000001-000001-005",
+                            "name": "数据导入"
+                        },
+                        {
+                            "key": "015-000001-000001-006",
+                            "name": "数据导出"
+                        }],
+                    "key": "015-000001-000001",
+                    "module": [{
+                        "function": [{
+                            "key": "015-000001-000001-000001-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000001-000001-002",
+                                "name": "爬虫参数配置"
+                            }],
+                        "key": "015-000001-000001-000001",
+                        "module": [],
+                        "name": "爬虫抓取",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/sensitive/reptilian/"
+                    }],
+                    "name": "文字商标库",
+                    "pageFullPathName": "",
+                    "show": 1,
+                    "url": "/compliance/database/sensitive/"
+                },
+                    {
+                        "function": [{
+                            "key": "015-000001-000003-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000003-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000003-003",
+                                "name": "删除"
+                            }],
+                        "key": "015-000001-000003",
+                        "module": [],
+                        "name": "图形商标库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/graphictrademark/"
+                    },
+                    {
+                        "function": [{
+                            "key": "015-000001-000004-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000004-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000004-003",
+                                "name": "删除"
+                            }],
+                        "key": "015-000001-000004",
+                        "module": [],
+                        "name": "版权库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/version/"
+                    },
+                    {
+                        "function": [{
+                            "key": "015-000001-000005-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000005-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000005-003",
+                                "name": "删除"
+                            }],
+                        "key": "015-000001-000005",
+                        "module": [],
+                        "name": "专利库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/patent/"
+                    },
+                    {
+                        "function": [{
+                            "key": "015-000001-000006-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000006-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000006-003",
+                                "name": "删除"
+                            }],
+                        "key": "015-000001-000006",
+                        "module": [],
+                        "name": "平台违禁品库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/contraband/"
+                    },
+                    {
+                        "function": [{
+                            "key": "015-000001-000007-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000007-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000007-003",
+                                "name": "删除"
+                            }],
+                        "key": "015-000001-000007",
+                        "module": [],
+                        "name": "平台认证库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/authentication/"
+                    },
+                    {
+                        "function": [{
+                            "key": "015-000001-000002-001",
+                            "name": "查看"
+                        },
+                            {
+                                "key": "015-000001-000002-002",
+                                "name": "新增/编辑"
+                            },
+                            {
+                                "key": "015-000001-000002-003",
+                                "name": "启用/批量"
+                            },
+                            {
+                                "key": "015-000001-000002-004",
+                                "name": "停用/批量"
+                            },
+                            {
+                                "key": "015-000001-000002-005",
+                                "name": "数据导入"
+                            },
+                            {
+                                "key": "015-000001-000002-006",
+                                "name": "数据导出"
+                            },
+                            {
+                                "key": "015-000001-000002-015",
+                                "name": "操作日志"
+                            }],
+                        "key": "015-000001-000002",
+                        "module": [{
+                            "function": [{
+                                "key": "015-000001-000002-000001-001",
+                                "name": "查看"
+                            },
+                                {
+                                    "key": "015-000001-000002-000001-002",
+                                    "name": "新增"
+                                },
+                                {
+                                    "key": "015-000001-000002-000001-003",
+                                    "name": "删除"
+                                }],
+                            "key": "015-000001-000002-000001",
+                            "module": [],
+                            "name": "按条件获取",
+                            "pageFullPathName": "",
+                            "show": 1,
+                            "url": "/compliance/database/sku/conditionmenu/"
+                        }],
+                        "name": "敏感SKU库",
+                        "pageFullPathName": "",
+                        "show": 1,
+                        "url": "/compliance/database/sku/"
+                    }],
+                "name": "知产库",
+                "url": "/compliance/"
+            }],
+        "system": {
+            "key": "015",
+            "name": "知产_test",
+            "url": "/compliance/"
+        },
+        "apiUrlPrefix": [
+            "/pls/ebay/motan/service/api/IEbayService/",
+            "/pls/pricing/motan/service/api/IPricingService/",
+            "/smtbatchlisting/api/",
+            "/listing/base/ext/IListingExtInfoService/",
+            "/listing/base/query/IListingStatusQueryService/",
+            "/listing/base/query/IListingImportStatusService/",
+            "/listing/base/dataimport/IListingImportControlService/"
+        ]
+    }]
+}

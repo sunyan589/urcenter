@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config-center
+	server="192.168.201.211:2181,192.168.201.212:2181,192.168.201.213:2181"
+	type="common">
+	<project-group name="urc-config" />
+	<project-name name="validator-config" />
+</config-center>

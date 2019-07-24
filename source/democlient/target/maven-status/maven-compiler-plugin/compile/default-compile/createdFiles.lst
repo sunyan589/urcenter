@@ -1,0 +1,11 @@
+com\yks\demo\controller\MotanRoleController.class
+com\yks\demo\controller\IpUtils.class
+com\yks\demo\configuration\MotanConfiguration.class
+com\yks\demo\validator\TestServiceImpl.class
+com\yks\demo\bean\UserInfo.class
+com\yks\demo\controller\UserLoginRunnable.class
+com\yks\demo\controller\MotanUserController.class
+com\yks\demo\DemoClientApplication.class
+com\yks\demo\configuration\MotanClientConfiguration.class
+com\yks\demo\controller\ThdInfo.class
+com\yks\demo\configuration\MotanServerConfiguration.class
